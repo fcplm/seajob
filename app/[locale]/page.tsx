@@ -122,7 +122,7 @@ function PricingSection() {
           {tiers.map((tier) => (
             <Card key={tier.key} className={tier.highlight ? 'border-primary shadow-lg' : ''}>
               <CardHeader>
-                {tier.highlight && <Badge className="w-fit mb-2">Popular</Badge>}
+                {tier.highlight && <Badge className="w-fit mb-2">{t('popular')}</Badge>}
                 <CardTitle>{t(tier.key)}</CardTitle>
                 <p className="text-2xl font-bold">{tier.price}</p>
               </CardHeader>

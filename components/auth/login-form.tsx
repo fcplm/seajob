@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,6 +11,8 @@ import { login } from '@/actions/auth'
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations('auth')
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect') ?? undefined
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -18,7 +21,7 @@ export function LoginForm({ locale }: { locale: string }) {
     setLoading(true)
     setError(null)
     const formData = new FormData(e.currentTarget)
-    const result = await login(formData, locale)
+    const result = await login(formData, locale, redirectTo)
     if (result?.error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setError(t(result.error as any))

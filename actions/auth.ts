@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-export async function login(formData: FormData, locale: string) {
+export async function login(formData: FormData, locale: string, redirectTo?: string) {
   const supabase = createClient()
   const { error } = await supabase.auth.signInWithPassword({
     email: formData.get('email') as string,
@@ -12,7 +12,9 @@ export async function login(formData: FormData, locale: string) {
   })
   if (error) return { error: 'invalidCredentials' }
   revalidatePath('/', 'layout')
-  redirect(`/${locale}/dashboard`)
+  // Validate redirect to prevent open redirect — must start with /locale/
+  const safeRedirect = redirectTo?.startsWith(`/${locale}/`) ? redirectTo : `/${locale}/dashboard`
+  redirect(safeRedirect)
 }
 
 export async function signup(formData: FormData, locale: string) {
@@ -47,7 +49,7 @@ export async function updateProfile(formData: FormData) {
     .update({
       full_name: formData.get('full_name') as string,
       rank: formData.get('rank') as string,
-      fleet_type: formData.get('fleet_type') as 'merchant' | 'tanker' | 'offshore' | 'cruise',
+      fleet_type: (formData.get('fleet_type') as string || null) as 'merchant' | 'tanker' | 'offshore' | 'cruise' | null,
       phone: formData.get('phone') as string,
     })
     .eq('id', user.id)

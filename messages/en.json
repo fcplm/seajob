@@ -42,6 +42,7 @@
     "pro": "Pro",
     "enterprise": "Enterprise",
     "comingSoon": "Coming Soon",
+    "popular": "Popular",
     "choosePlan": "Choose Plan",
     "tier": {
       "free": {
@@ -117,6 +118,7 @@
     "save": "Save Changes",
     "saving": "Saving...",
     "saved": "Changes saved.",
+    "saveError": "Failed to save. Please try again.",
     "merchant": "Merchant",
     "tanker": "Tanker",
     "offshore": "Offshore",

@@ -9,6 +9,11 @@ export async function GET(
   const code = searchParams.get('code')
   const locale = params.locale
 
+  const validLocales = ['en', 'ru']
+  if (!validLocales.includes(locale)) {
+    return NextResponse.redirect(new URL('/en/login', request.url))
+  }
+
   if (code) {
     const supabase = createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)

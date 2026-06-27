@@ -34,7 +34,7 @@ export default function ProfilePage() {
     const formData = new FormData(e.currentTarget)
     const result = await updateProfile(formData)
     setLoading(false)
-    if (result?.error) toast.error(result.error)
+    if (result?.error) toast.error(t('saveError'))
     else toast.success(t('saved'))
   }
 
