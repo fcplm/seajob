@@ -42,13 +42,27 @@
     "pro": "Pro",
     "enterprise": "Enterprise",
     "comingSoon": "Coming Soon",
-    "choosePlan": "Choose Plan"
+    "choosePlan": "Choose Plan",
+    "tier": {
+      "free": {
+        "features": ["Resume Builder", "5 Job Applications"]
+      },
+      "pro": {
+        "features": ["Everything in Free", "CV Sender (100 emails)", "Priority Support"]
+      },
+      "enterprise": {
+        "features": ["Everything in Pro", "Unlimited CV Sends", "Dedicated Manager"]
+      }
+    }
   },
   "footer": {
     "tagline": "The job platform built for seafarers.",
     "links": "Links",
     "contact": "Contact",
-    "rights": "All rights reserved."
+    "rights": "All rights reserved.",
+    "featuresLink": "Features",
+    "pricingLink": "Pricing",
+    "email": "contact@seajob.io"
   },
   "auth": {
     "email": "Email",

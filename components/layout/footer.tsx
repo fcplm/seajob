@@ -16,13 +16,13 @@ export function Footer() {
         <div>
           <p className="font-semibold mb-2">{t('links')}</p>
           <ul className="text-sm text-muted-foreground space-y-1">
-            <li><a href={`/${locale}#features`} className="hover:underline">Features</a></li>
-            <li><a href={`/${locale}#pricing`} className="hover:underline">{t('links')}</a></li>
+            <li><a href={`/${locale}#features`} className="hover:underline">{t('featuresLink')}</a></li>
+            <li><a href={`/${locale}#pricing`} className="hover:underline">{t('pricingLink')}</a></li>
           </ul>
         </div>
         <div>
           <p className="font-semibold mb-2">{t('contact')}</p>
-          <p className="text-sm text-muted-foreground">contact@seajob.io</p>
+          <p className="text-sm text-muted-foreground">{t('email')}</p>
         </div>
       </div>
       <div className="border-t py-4 text-center text-xs text-muted-foreground">

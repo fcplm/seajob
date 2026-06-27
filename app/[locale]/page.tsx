@@ -109,10 +109,10 @@ function FleetsSection() {
 
 function PricingSection() {
   const t = useTranslations('pricing')
-  const tiers: { key: 'free' | 'pro' | 'enterprise'; price: string; features: string[]; highlight?: boolean }[] = [
-    { key: 'free', price: '$0', features: ['Resume Builder', '5 Job Applications'] },
-    { key: 'pro', price: '$19/mo', features: ['Everything in Free', 'CV Sender (100 emails)', 'Priority Support'], highlight: true },
-    { key: 'enterprise', price: '$49/mo', features: ['Everything in Pro', 'Unlimited CV Sends', 'Dedicated Manager'] },
+  const tiers = [
+    { key: 'free' as const, price: '$0', highlight: false },
+    { key: 'pro' as const, price: '$19/mo', highlight: true },
+    { key: 'enterprise' as const, price: '$49/mo', highlight: false },
   ]
   return (
     <section className="py-20 px-4 bg-muted/30" id="pricing">
@@ -128,7 +128,7 @@ function PricingSection() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  {tier.features.map((f) => <li key={f}>✓ {f}</li>)}
+                  {(t.raw(`tier.${tier.key}.features`) as string[]).map((f) => <li key={f}>✓ {f}</li>)}
                 </ul>
                 <Button variant={tier.highlight ? 'default' : 'outline'} disabled>
                   {t('comingSoon')}

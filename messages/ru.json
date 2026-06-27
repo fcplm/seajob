@@ -42,13 +42,27 @@
     "pro": "Pro",
     "enterprise": "Корпоратив",
     "comingSoon": "Скоро",
-    "choosePlan": "Выбрать"
+    "choosePlan": "Выбрать",
+    "tier": {
+      "free": {
+        "features": ["Конструктор резюме", "5 откликов на вакансии"]
+      },
+      "pro": {
+        "features": ["Всё из Free", "CV Sender (100 писем)", "Приоритетная поддержка"]
+      },
+      "enterprise": {
+        "features": ["Всё из Pro", "Безлимитные отправки CV", "Персональный менеджер"]
+      }
+    }
   },
   "footer": {
     "tagline": "Платформа поиска работы для моряков.",
     "links": "Ссылки",
     "contact": "Контакты",
-    "rights": "Все права защищены."
+    "rights": "Все права защищены.",
+    "featuresLink": "Возможности",
+    "pricingLink": "Цены",
+    "email": "contact@seajob.io"
   },
   "auth": {
     "email": "Email",
