@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "vacancies": "Вакансии",
+    "pricing": "Цены",
+    "about": "О нас",
+    "login": "Войти",
+    "getStarted": "Начать"
+  },
+  "hero": {
+    "headline": "Найди работу в море — быстро и просто",
+    "subheadline": "Создай резюме моряка, просматривай вакансии и отправляй CV сотням работодателей в один клик.",
+    "cta": "Создать резюме бесплатно"
+  },
+  "howItWorks": {
+    "title": "Как это работает",
+    "step1Title": "Создай резюме",
+    "step1Desc": "Заполни профиль моряка с помощью нашего конструктора.",
+    "step2Title": "Найди вакансию",
+    "step2Desc": "Просматривай вакансии по типу флота и должности.",
+    "step3Title": "Отправь CV",
+    "step3Desc": "Разошли резюме сотням работодателей за секунды."
+  },
+  "features": {
+    "title": "Всё что нужно",
+    "resumeTitle": "Конструктор резюме",
+    "resumeDesc": "Профессиональное CV моряка за несколько минут.",
+    "vacanciesTitle": "Доска вакансий",
+    "vacanciesDesc": "Актуальные вакансии по всем типам флота.",
+    "senderTitle": "CV Sender",
+    "senderDesc": "Достучись до сотен крюинговых менеджеров мгновенно."
+  },
+  "fleets": {
+    "title": "Для любого флота",
+    "merchant": "Торговый",
+    "tanker": "Танкерный",
+    "offshore": "Оффшор",
+    "cruise": "Круизный"
+  },
+  "pricing": {
+    "title": "Простые тарифы",
+    "free": "Бесплатно",
+    "pro": "Pro",
+    "enterprise": "Корпоратив",
+    "comingSoon": "Скоро",
+    "choosePlan": "Выбрать"
+  },
+  "footer": {
+    "tagline": "Платформа поиска работы для моряков.",
+    "links": "Ссылки",
+    "contact": "Контакты",
+    "rights": "Все права защищены."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Пароль",
+    "fullName": "Полное имя",
+    "login": "Войти",
+    "signup": "Зарегистрироваться",
+    "loginTitle": "С возвращением",
+    "signupTitle": "Создать аккаунт",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "signupLink": "Зарегистрироваться",
+    "loginLink": "Войти",
+    "continueWithGoogle": "Войти через Google",
+    "checkEmail": "Проверь email для подтверждения аккаунта.",
+    "invalidCredentials": "Неверный email или пароль.",
+    "emailInUse": "Аккаунт с этим email уже существует."
+  },
+  "dashboard": {
+    "home": "Кабинет",
+    "profile": "Профиль",
+    "resume": "Моё резюме",
+    "vacancies": "Вакансии",
+    "sender": "CV Sender",
+    "notifications": "Уведомления",
+    "settings": "Настройки",
+    "logout": "Выйти",
+    "subscriptionStatus": "Подписка",
+    "upgrade": "Улучшить",
+    "free": "Бесплатно",
+    "pro": "Pro",
+    "enterprise": "Корпоратив",
+    "createResume": "Создать резюме",
+    "editResume": "Редактировать резюме",
+    "noResume": "Вы ещё не создали резюме.",
+    "recentActivity": "Последняя активность",
+    "noActivity": "Активности пока нет.",
+    "sendAnalytics": "Аналитика отправок",
+    "emailsSent": "Писем отправлено",
+    "segmentsReached": "Сегментов охвачено",
+    "comingSoon": "Скоро"
+  },
+  "profile": {
+    "title": "Мой профиль",
+    "fullName": "Полное имя",
+    "rank": "Должность",
+    "fleetType": "Тип флота",
+    "phone": "Телефон",
+    "save": "Сохранить изменения",
+    "saved": "Изменения сохранены.",
+    "merchant": "Торговый",
+    "tanker": "Танкерный",
+    "offshore": "Оффшор",
+    "cruise": "Круизный"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "changePassword": "Изменить пароль",
+    "deleteAccount": "Удалить аккаунт",
+    "deleteWarning": "Это действие нельзя отменить."
+  }
+}

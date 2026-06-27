@@ -5,7 +5,9 @@
       "Read(//Users/sergeymedinskiy/.npm/_cacache/index-v5/cd/**)",
       "Read(//Users/sergeymedinskiy/.npm/**)",
       "Bash(sudo npm cache clean --force)",
-      "Bash(npx *)"
+      "Bash(npx *)",
+      "Bash(rm -f \"/Users/sergeymedinskiy/Documents/claude projects/web site for cv /components/ui/\"*.tsx)",
+      "Bash(rm -f \"/Users/sergeymedinskiy/Documents/claude projects/web site for cv /components.json\")"
     ]
   }
 }

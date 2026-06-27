@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "vacancies": "Vacancies",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Log in",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "headline": "Find Your Next Maritime Job — Fast",
+    "subheadline": "Build your seafarer CV, browse vacancies, and send your resume to hundreds of employers in one click.",
+    "cta": "Create Free Resume"
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "step1Title": "Build Your Resume",
+    "step1Desc": "Fill in your seafarer profile using our guided builder.",
+    "step2Title": "Find a Vacancy",
+    "step2Desc": "Browse jobs filtered by fleet type and rank.",
+    "step3Title": "Send Your CV",
+    "step3Desc": "Blast your resume to hundreds of employers in seconds."
+  },
+  "features": {
+    "title": "Everything You Need",
+    "resumeTitle": "Resume Builder",
+    "resumeDesc": "Professional maritime CV in minutes.",
+    "vacanciesTitle": "Vacancy Board",
+    "vacanciesDesc": "Curated jobs across all fleet types.",
+    "senderTitle": "CV Sender",
+    "senderDesc": "Reach hundreds of crewing managers instantly."
+  },
+  "fleets": {
+    "title": "Built for Every Fleet",
+    "merchant": "Merchant",
+    "tanker": "Tanker",
+    "offshore": "Offshore",
+    "cruise": "Cruise"
+  },
+  "pricing": {
+    "title": "Simple Pricing",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise",
+    "comingSoon": "Coming Soon",
+    "choosePlan": "Choose Plan"
+  },
+  "footer": {
+    "tagline": "The job platform built for seafarers.",
+    "links": "Links",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "loginTitle": "Welcome back",
+    "signupTitle": "Create your account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signupLink": "Sign up",
+    "loginLink": "Log in",
+    "continueWithGoogle": "Continue with Google",
+    "checkEmail": "Check your email to confirm your account.",
+    "invalidCredentials": "Invalid email or password.",
+    "emailInUse": "An account with this email already exists."
+  },
+  "dashboard": {
+    "home": "Dashboard",
+    "profile": "Profile",
+    "resume": "My Resume",
+    "vacancies": "Vacancies",
+    "sender": "CV Sender",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "logout": "Log Out",
+    "subscriptionStatus": "Subscription",
+    "upgrade": "Upgrade",
+    "free": "Free",
+    "pro": "Pro",
+    "enterprise": "Enterprise",
+    "createResume": "Create Resume",
+    "editResume": "Edit Resume",
+    "noResume": "You haven't created a resume yet.",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No activity yet.",
+    "sendAnalytics": "Send Analytics",
+    "emailsSent": "Emails Sent",
+    "segmentsReached": "Segments Reached",
+    "comingSoon": "Coming soon"
+  },
+  "profile": {
+    "title": "My Profile",
+    "fullName": "Full Name",
+    "rank": "Rank",
+    "fleetType": "Fleet Type",
+    "phone": "Phone",
+    "save": "Save Changes",
+    "saved": "Changes saved.",
+    "merchant": "Merchant",
+    "tanker": "Tanker",
+    "offshore": "Offshore",
+    "cruise": "Cruise"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account",
+    "deleteWarning": "This action cannot be undone."
+  }
+}
