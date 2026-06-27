@@ -20,7 +20,9 @@ export function SignupForm({ locale }: { locale: string }) {
     const formData = new FormData(e.currentTarget)
     const result = await signup(formData, locale)
     setLoading(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (result?.error) setMessage({ type: 'error', text: t(result.error as any) })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (result?.success) setMessage({ type: 'success', text: t(result.success as any) })
   }
 
@@ -54,7 +56,7 @@ export function SignupForm({ locale }: { locale: string }) {
           </p>
         )}
         <Button type="submit" disabled={loading}>
-          {loading ? '...' : t('signup')}
+          {loading ? t('loading') : t('signup')}
         </Button>
       </form>
       <div className="relative">
@@ -62,7 +64,7 @@ export function SignupForm({ locale }: { locale: string }) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">or</span>
+          <span className="bg-background px-2 text-muted-foreground">{t('or')}</span>
         </div>
       </div>
       <Button variant="outline" onClick={handleGoogle}>

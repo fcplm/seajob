@@ -65,7 +65,9 @@
     "continueWithGoogle": "Continue with Google",
     "checkEmail": "Check your email to confirm your account.",
     "invalidCredentials": "Invalid email or password.",
-    "emailInUse": "An account with this email already exists."
+    "emailInUse": "An account with this email already exists.",
+    "or": "or",
+    "loading": "Loading..."
   },
   "dashboard": {
     "home": "Dashboard",

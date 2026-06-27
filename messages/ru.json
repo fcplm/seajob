@@ -65,7 +65,9 @@
     "continueWithGoogle": "Войти через Google",
     "checkEmail": "Проверь email для подтверждения аккаунта.",
     "invalidCredentials": "Неверный email или пароль.",
-    "emailInUse": "Аккаунт с этим email уже существует."
+    "emailInUse": "Аккаунт с этим email уже существует.",
+    "or": "или",
+    "loading": "Загрузка..."
   },
   "dashboard": {
     "home": "Кабинет",

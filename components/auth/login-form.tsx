@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -11,7 +10,6 @@ import { login } from '@/actions/auth'
 
 export function LoginForm({ locale }: { locale: string }) {
   const t = useTranslations('auth')
-  const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -22,6 +20,7 @@ export function LoginForm({ locale }: { locale: string }) {
     const formData = new FormData(e.currentTarget)
     const result = await login(formData, locale)
     if (result?.error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setError(t(result.error as any))
       setLoading(false)
     }
@@ -51,7 +50,7 @@ export function LoginForm({ locale }: { locale: string }) {
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" disabled={loading}>
-          {loading ? '...' : t('login')}
+          {loading ? t('loading') : t('login')}
         </Button>
       </form>
       <div className="relative">
@@ -59,7 +58,7 @@ export function LoginForm({ locale }: { locale: string }) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">or</span>
+          <span className="bg-background px-2 text-muted-foreground">{t('or')}</span>
         </div>
       </div>
       <Button variant="outline" onClick={handleGoogle}>
