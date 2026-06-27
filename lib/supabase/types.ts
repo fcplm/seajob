@@ -16,7 +16,12 @@ export type Database = {
         Row: Profile
         Insert: Omit<Profile, 'created_at'>
         Update: Partial<Omit<Profile, 'id' | 'created_at'>>
+        Relationships: []
       }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

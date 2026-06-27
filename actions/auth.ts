@@ -36,3 +36,23 @@ export async function logout(locale: string) {
   revalidatePath('/', 'layout')
   redirect(`/${locale}/login`)
 }
+
+export async function updateProfile(formData: FormData) {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({
+      full_name: formData.get('full_name') as string,
+      rank: formData.get('rank') as string,
+      fleet_type: formData.get('fleet_type') as 'merchant' | 'tanker' | 'offshore' | 'cruise',
+      phone: formData.get('phone') as string,
+    })
+    .eq('id', user.id)
+
+  if (error) return { error: error.message }
+  revalidatePath('/', 'layout')
+  return { success: true }
+}
