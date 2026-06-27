@@ -21,7 +21,10 @@ export default function ProfilePage() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) return
       supabase.from('profiles').select('*').eq('id', user.id).single()
-        .then(({ data }) => setProfile(data))
+        .then(({ data, error }) => {
+          if (error) toast.error(error.message)
+          else setProfile(data as Profile | null)
+        })
     })
   }, [])
 
@@ -38,7 +41,7 @@ export default function ProfilePage() {
   return (
     <div className="max-w-lg">
       <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form key={profile?.id ?? 'empty'} onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <Label htmlFor="full_name">{t('fullName')}</Label>
           <Input id="full_name" name="full_name" defaultValue={profile?.full_name ?? ''} />
@@ -64,7 +67,7 @@ export default function ProfilePage() {
           <Input id="phone" name="phone" type="tel" defaultValue={profile?.phone ?? ''} />
         </div>
         <Button type="submit" disabled={loading} className="w-fit">
-          {loading ? '...' : t('save')}
+          {loading ? t('saving') : t('save')}
         </Button>
       </form>
     </div>
