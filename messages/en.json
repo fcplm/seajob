@@ -99,6 +99,7 @@
     "enterprise": "Enterprise",
     "createResume": "Create Resume",
     "editResume": "Edit Resume",
+    "resumeCreated": "✓ Resume created",
     "noResume": "You haven't created a resume yet.",
     "recentActivity": "Recent Activity",
     "noActivity": "No activity yet.",

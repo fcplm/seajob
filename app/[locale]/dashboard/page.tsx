@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import type { Profile } from '@/lib/supabase/types'
 import { ProfileCard } from '@/components/dashboard/profile-card'
 import { SubscriptionWidget } from '@/components/dashboard/subscription-widget'
 import { ResumeWidget } from '@/components/dashboard/resume-widget'
@@ -11,11 +12,13 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const { data: profile } = await supabase
+  const { data: rawProfile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
+
+  const profile = rawProfile as Profile | null
 
   if (!profile) redirect(`/${locale}/login`)
 

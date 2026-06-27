@@ -16,7 +16,7 @@ export function ResumeWidget({ hasResume }: { hasResume: boolean }) {
       </CardHeader>
       <CardContent className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {hasResume ? '✓ Resume created' : t('noResume')}
+          {hasResume ? t('resumeCreated') : t('noResume')}
         </p>
         <Link href={`/${locale}/dashboard/resume`}>
           <Button size="sm" variant={hasResume ? 'outline' : 'default'}>

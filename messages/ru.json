@@ -99,6 +99,7 @@
     "enterprise": "Корпоратив",
     "createResume": "Создать резюме",
     "editResume": "Редактировать резюме",
+    "resumeCreated": "✓ Резюме создано",
     "noResume": "Вы ещё не создали резюме.",
     "recentActivity": "Последняя активность",
     "noActivity": "Активности пока нет.",
