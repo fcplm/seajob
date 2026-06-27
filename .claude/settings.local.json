@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx claude-mem *)",
+      "Read(//Users/sergeymedinskiy/.npm/_cacache/index-v5/cd/**)",
+      "Read(//Users/sergeymedinskiy/.npm/**)",
+      "Bash(sudo npm cache clean --force)",
+      "Bash(npx *)"
+    ]
+  }
+}
