@@ -22,12 +22,20 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
 
   if (!profile) redirect(`/${locale}/login`)
 
+  const { data: resumeRow } = await supabase
+    .from('resumes')
+    .select('id')
+    .eq('user_id', user.id)
+    .single()
+
+  const hasResume = !!resumeRow
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <ProfileCard profile={profile} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SubscriptionWidget status={profile.subscription_status} />
-        <ResumeWidget hasResume={false} />
+        <ResumeWidget hasResume={hasResume} />
         <ActivityWidget />
         <AnalyticsWidget />
       </div>
