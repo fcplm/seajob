@@ -23,7 +23,7 @@ const TEMPLATES: { id: Template; labelKey: 'templateClassic' | 'templateModern' 
 
 export function TemplatePicker({ selected, subscriptionStatus, onSelect }: Props) {
   const t = useTranslations('resume')
-  const isPro = subscriptionStatus !== 'free'
+  const isPro = subscriptionStatus === 'pro' || subscriptionStatus === 'enterprise'
 
   async function handleSelect(template: Template) {
     if (!isPro && template !== 'classic') {

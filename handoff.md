@@ -45,8 +45,8 @@ Four sub-systems planned:
 
 `.env.local` has been updated with real credentials:
 - **Project ID:** `hsydttnoxavrdlmidjsb`
-- **URL:** `https://hsydttnoxavrdlmidjsb.supabase.co`
-- **Anon key:** `sb_publishable_cFU2Y-z7BxePWkk9bCgJjw_67rcTv1t`
+- **URL:** `https://<project-id>.supabase.co`
+- **Anon key:** `<see .env.local>`
 
 ### Foundation SQL migration still needs to be run
 

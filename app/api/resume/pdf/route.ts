@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
   const fullName = (profile?.full_name ?? 'seafarer')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replace(/^-+|-+$/g, '') || 'seafarer'
   const month = new Date().toISOString().slice(0, 7)
   const filename = `seajob-cv-${fullName}-${month}.pdf`
 

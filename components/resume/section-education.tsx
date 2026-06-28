@@ -69,7 +69,7 @@ export function SectionEducation({ initialData, onComplete }: Props) {
             <div className="text-sm">
               <p className="font-medium">{entry.degree}{entry.field ? ` ${t('inField')} ${entry.field}` : ''}</p>
               <p className="text-muted-foreground">{entry.institution}</p>
-              <p className="text-muted-foreground text-xs">{entry.started_at} — {entry.ended_at}</p>
+              <p className="text-muted-foreground text-xs">{entry.started_at} — {entry.ended_at ?? t('current')}</p>
             </div>
             <div className="flex gap-1 shrink-0">
               <Button variant="ghost" size="icon" onClick={() => startEdit(entry)} aria-label={t('edit')}><Pencil className="h-4 w-4" /></Button>

@@ -14,18 +14,16 @@ import type {
 type Client = ReturnType<typeof createClient>
 
 async function ensureResume(supabase: Client, userId: string): Promise<string | null> {
+  const { error } = await supabase
+    .from('resumes')
+    .upsert({ user_id: userId }, { onConflict: 'user_id', ignoreDuplicates: true })
+  if (error) return null
   const { data } = await supabase
     .from('resumes')
     .select('id')
     .eq('user_id', userId)
     .single()
-  if (data) return data.id
-  const { data: created } = await supabase
-    .from('resumes')
-    .insert({ user_id: userId })
-    .select('id')
-    .single()
-  return created?.id ?? null
+  return data?.id ?? null
 }
 
 export async function upsertResumeMeta(payload: {
