@@ -135,6 +135,7 @@
     "title": "My Resume",
     "completeness": "{percent}% complete",
     "downloadPdf": "Download PDF",
+    "badgePro": "Pro",
     "templateClassic": "Classic",
     "templateModern": "Modern",
     "templateCompact": "Compact",

@@ -56,7 +56,7 @@ export function TemplatePicker({ selected, subscriptionStatus, onSelect }: Props
             {locked && (
               <span className="absolute top-1 right-1">
                 <Badge variant="secondary" className="text-xs gap-1 py-0">
-                  <Lock className="h-3 w-3" />Pro
+                  <Lock className="h-3 w-3" />{t('badgePro')}
                 </Badge>
               </span>
             )}

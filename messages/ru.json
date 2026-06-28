@@ -135,6 +135,7 @@
     "title": "Моё резюме",
     "completeness": "{percent}% заполнено",
     "downloadPdf": "Скачать PDF",
+    "badgePro": "Pro",
     "templateClassic": "Классик",
     "templateModern": "Современный",
     "templateCompact": "Компактный",
