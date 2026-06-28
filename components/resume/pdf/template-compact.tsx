@@ -69,7 +69,7 @@ export function TemplateCompact({ data }: { data: PdfResumeData }) {
           <Text style={s.sectionTitle}>Languages & Skills</Text>
           <View style={s.rule} />
           <View style={s.row}>
-            {languages.map(l => <Text key={l.id} style={{ marginRight: 10, marginBottom: 2 }}>{l.language} ({l.level})</Text>)}
+            {languages.map(l => <Text key={l.id} style={{ marginRight: 10, marginBottom: 2 }}>{[l.language, l.level ? `(${l.level})` : null].filter(Boolean).join(' ')}</Text>)}
             {skills.map(sk => <Text key={sk.id} style={{ marginRight: 10, marginBottom: 2 }}>• {sk.name}</Text>)}
           </View>
         </>}

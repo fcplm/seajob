@@ -64,7 +64,7 @@ export function TemplateModern({ data }: { data: PdfResumeData }) {
         {(languages.length > 0 || skills.length > 0) && <>
           <Text style={s.sectionTitle}>Skills & Languages</Text>
           <View style={s.row}>
-            {languages.map(l => <Text key={l.id} style={{ marginRight: 12 }}>{l.language} ({l.level})</Text>)}
+            {languages.map(l => <Text key={l.id} style={{ marginRight: 12 }}>{[l.language, l.level ? `(${l.level})` : null].filter(Boolean).join(' ')}</Text>)}
             {skills.map(sk => <Text key={sk.id} style={{ marginRight: 12 }}>• {sk.name}</Text>)}
           </View>
         </>}
