@@ -186,6 +186,8 @@
     "availability": "Next Availability",
     "contractDuration": "Contract Duration",
     "salaryExpectation": "Salary Expectation",
+    "contractDurationPlaceholder": "e.g. 4–6 months",
+    "salaryExpectationPlaceholder": "e.g. $3,500/month",
     "pdfError": "Failed to generate PDF. Please try again.",
     "noPdfData": "Complete at least one section before downloading."
   }

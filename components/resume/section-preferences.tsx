@@ -61,7 +61,7 @@ export function SectionPreferences({ initialData, onComplete }: Props) {
           id="contract"
           value={form.contract_duration ?? ''}
           onChange={e => set('contract_duration', e.target.value)}
-          placeholder="e.g. 4–6 months"
+          placeholder={t('contractDurationPlaceholder')}
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -70,7 +70,7 @@ export function SectionPreferences({ initialData, onComplete }: Props) {
           id="salary"
           value={form.salary_expectation ?? ''}
           onChange={e => set('salary_expectation', e.target.value)}
-          placeholder="e.g. $3,500/month"
+          placeholder={t('salaryExpectationPlaceholder')}
         />
       </div>
       <div className="flex items-center gap-3">

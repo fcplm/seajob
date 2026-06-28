@@ -186,6 +186,8 @@
     "availability": "Дата готовности",
     "contractDuration": "Длительность контракта",
     "salaryExpectation": "Ожидаемая зарплата",
+    "contractDurationPlaceholder": "напр. 4–6 месяцев",
+    "salaryExpectationPlaceholder": "напр. $3 500/мес",
     "pdfError": "Ошибка генерации PDF. Попробуйте ещё раз.",
     "noPdfData": "Заполните хотя бы один раздел перед скачиванием."
   }
