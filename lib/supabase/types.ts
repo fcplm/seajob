@@ -9,23 +9,6 @@ export type Profile = {
   created_at: string
 }
 
-export type Database = {
-  public: {
-    Tables: {
-      profiles: {
-        Row: Profile
-        Insert: Omit<Profile, 'created_at'>
-        Update: Partial<Omit<Profile, 'id' | 'created_at'>>
-        Relationships: []
-      }
-    }
-    Views: Record<string, never>
-    Functions: Record<string, never>
-    Enums: Record<string, never>
-    CompositeTypes: Record<string, never>
-  }
-}
-
 export type Resume = {
   id: string
   user_id: string
@@ -108,4 +91,63 @@ export type ResumeData = {
   languages: ResumeLanguage[]
   skills: ResumeSkill[]
   references: ResumeReference[]
+}
+
+export type Database = {
+  public: {
+    Tables: {
+      profiles: {
+        Row: Profile
+        Insert: Omit<Profile, 'created_at'>
+        Update: Partial<Omit<Profile, 'id' | 'created_at'>>
+        Relationships: []
+      }
+      resumes: {
+        Row: Resume
+        Insert: Pick<Resume, 'user_id'> & Partial<Omit<Resume, 'id' | 'user_id' | 'created_at' | 'updated_at'>>
+        Update: Partial<Omit<Resume, 'id' | 'user_id' | 'created_at'>>
+        Relationships: []
+      }
+      resume_experience: {
+        Row: ResumeExperience
+        Insert: Omit<ResumeExperience, 'id'>
+        Update: Partial<Omit<ResumeExperience, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      resume_certificates: {
+        Row: ResumeCertificate
+        Insert: Omit<ResumeCertificate, 'id'>
+        Update: Partial<Omit<ResumeCertificate, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      resume_education: {
+        Row: ResumeEducation
+        Insert: Omit<ResumeEducation, 'id'>
+        Update: Partial<Omit<ResumeEducation, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      resume_languages: {
+        Row: ResumeLanguage
+        Insert: Omit<ResumeLanguage, 'id'>
+        Update: Partial<Omit<ResumeLanguage, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      resume_skills: {
+        Row: ResumeSkill
+        Insert: Omit<ResumeSkill, 'id'>
+        Update: Partial<Omit<ResumeSkill, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      resume_references: {
+        Row: ResumeReference
+        Insert: Omit<ResumeReference, 'id'>
+        Update: Partial<Omit<ResumeReference, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+    }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
+  }
 }
