@@ -60,9 +60,13 @@ export function ResumeEditor({ data, subscriptionStatus }: Props) {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-4">
         <CompletenessBar score={score} />
-        <a href={`/api/resume/pdf?template=${selectedTemplate}`} download>
-          <Button disabled={!hasResume} size="sm">{t('downloadPdf')}</Button>
-        </a>
+        {hasResume ? (
+          <a href={`/api/resume/pdf?template=${selectedTemplate}`} download>
+            <Button size="sm">{t('downloadPdf')}</Button>
+          </a>
+        ) : (
+          <Button disabled size="sm">{t('downloadPdf')}</Button>
+        )}
       </div>
 
       <TemplatePicker
