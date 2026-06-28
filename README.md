@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SeaJob
+
+A web platform for seafarers to simplify job searching. Build a professional CV, browse maritime vacancies, and send your resume to hundreds of employers in one click.
+
+## Features
+
+| Sub-system | Status | Description |
+|---|---|---|
+| Personal Dashboard | Done | Profile, subscription status, resume preview, analytics |
+| Resume Builder | Planned | Quiz-based CV creation with PDF export |
+| Vacancies Board | Planned | Job listings filtered by fleet type and rank |
+| CV Sender | Planned | Bulk email to fleet-segmented employer databases |
+
+## Tech Stack
+
+- **Framework** — Next.js 14 App Router, TypeScript strict
+- **Styling** — Tailwind CSS + shadcn/ui (Default/Slate/Radix UI)
+- **i18n** — next-intl v4, `/en/` and `/ru/` URL routing
+- **Database & Auth** — Supabase (PostgreSQL + RLS + Supabase Auth)
+- **Testing** — Playwright (Chromium)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+Copy the example and fill in your Supabase credentials:
+
+```bash
+cp .env.local.example .env.local
+```
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### 3. Set up Supabase
+
+Run this SQL in your Supabase project's SQL editor:
+
+```sql
+create table profiles (
+  id uuid references auth.users primary key,
+  full_name text,
+  rank text,
+  fleet_type text check (fleet_type in ('merchant','tanker','offshore','cruise')),
+  phone text,
+  photo_url text,
+  subscription_status text not null default 'free',
+  created_at timestamptz default now()
+);
+
+alter table profiles enable row level security;
+
+create policy "Users manage own profile" on profiles
+  for all using (auth.uid() = id);
+
+create function handle_new_user() returns trigger as $$
+begin
+  insert into public.profiles (id, full_name)
+  values (new.id, new.raw_user_meta_data->>'full_name');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();
+```
+
+Enable Google OAuth in Supabase → Auth → Providers. Set the redirect URL to:
+
+```
+http://localhost:3000/en/auth/callback
+```
+
+### 4. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — redirects to `/en/`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev                              # Development server
+npm run build                            # Production build
+npx playwright test --project=chromium   # E2E tests
+```
 
-## Learn More
+## Locales
 
-To learn more about Next.js, take a look at the following resources:
+| URL prefix | Language |
+|---|---|
+| `/en/` | English |
+| `/ru/` | Russian |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All user-facing strings live in `messages/en.json` and `messages/ru.json`. Never hardcode UI text.
