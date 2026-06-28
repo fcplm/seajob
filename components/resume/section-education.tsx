@@ -67,7 +67,7 @@ export function SectionEducation({ initialData, onComplete }: Props) {
         <Card key={entry.id}>
           <CardContent className="pt-4 flex items-start justify-between gap-2">
             <div className="text-sm">
-              <p className="font-medium">{entry.degree}{entry.field ? ` in ${entry.field}` : ''}</p>
+              <p className="font-medium">{entry.degree}{entry.field ? ` ${t('inField')} ${entry.field}` : ''}</p>
               <p className="text-muted-foreground">{entry.institution}</p>
               <p className="text-muted-foreground text-xs">{entry.started_at} — {entry.ended_at}</p>
             </div>

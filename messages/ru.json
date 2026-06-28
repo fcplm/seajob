@@ -175,6 +175,7 @@
     "institution": "Учебное заведение",
     "degree": "Степень",
     "field": "Специальность",
+    "inField": "по",
     "language": "Язык",
     "level": "Уровень",
     "skillName": "Навык",

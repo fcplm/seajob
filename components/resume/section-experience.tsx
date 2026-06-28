@@ -94,7 +94,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
               <div className="text-sm min-w-0">
                 <p className="font-medium truncate">{entry.position} — {entry.vessel_name}</p>
                 <p className="text-muted-foreground">{entry.company}{entry.flag ? ` · ${entry.flag}` : ''}</p>
-                <p className="text-muted-foreground text-xs">{entry.vessel_type}{entry.grt ? ` · ${entry.grt} GRT` : ''}{entry.dwt ? ` · ${entry.dwt} DWT` : ''}</p>
+                <p className="text-muted-foreground text-xs">{entry.vessel_type}{entry.grt ? ` · ${entry.grt} ${t('grt')}` : ''}{entry.dwt ? ` · ${entry.dwt} ${t('dwt')}` : ''}</p>
                 <p className="text-muted-foreground text-xs">{entry.started_at} — {entry.ended_at ?? t('current')}</p>
               </div>
               <div className="flex gap-1 shrink-0">
@@ -105,7 +105,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
           </Card>
         )
       ))}
-      {editingId && (
+      {showForm && (
         <div className="border rounded-lg p-4 flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-3">
             <Field label={t('vesselName')}><Input value={form.vessel_name ?? ''} onChange={e => setField('vessel_name', e.target.value)} /></Field>
@@ -120,26 +120,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
           </div>
           <div className="flex gap-2">
             <Button size="sm" onClick={handleSave} disabled={saving}>{saving ? t('saving') : t('save')}</Button>
-            <Button size="sm" variant="outline" onClick={() => setEditingId(null)}>{t('cancel')}</Button>
-          </div>
-        </div>
-      )}
-      {adding && (
-        <div className="border rounded-lg p-4 flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-3">
-            <Field label={t('vesselName')}><Input value={form.vessel_name ?? ''} onChange={e => setField('vessel_name', e.target.value)} /></Field>
-            <Field label={t('vesselType')}><Input value={form.vessel_type ?? ''} onChange={e => setField('vessel_type', e.target.value)} /></Field>
-            <Field label={t('grt')}><Input type="number" value={form.grt ?? ''} onChange={e => setField('grt', e.target.value ? Number(e.target.value) : null)} /></Field>
-            <Field label={t('dwt')}><Input type="number" value={form.dwt ?? ''} onChange={e => setField('dwt', e.target.value ? Number(e.target.value) : null)} /></Field>
-            <Field label={t('flag')}><Input value={form.flag ?? ''} onChange={e => setField('flag', e.target.value)} /></Field>
-            <Field label={t('company')}><Input value={form.company ?? ''} onChange={e => setField('company', e.target.value)} /></Field>
-            <Field label={t('position')} className="col-span-2"><Input value={form.position ?? ''} onChange={e => setField('position', e.target.value)} /></Field>
-            <Field label={t('startDate')}><Input type="date" value={form.started_at ?? ''} onChange={e => setField('started_at', e.target.value)} /></Field>
-            <Field label={t('endDate')}><Input type="date" value={form.ended_at ?? ''} onChange={e => setField('ended_at', e.target.value)} /></Field>
-          </div>
-          <div className="flex gap-2">
-            <Button size="sm" onClick={handleSave} disabled={saving}>{saving ? t('saving') : t('save')}</Button>
-            <Button size="sm" variant="outline" onClick={() => setAdding(false)}>{t('cancel')}</Button>
+            <Button size="sm" variant="outline" onClick={() => { setAdding(false); setEditingId(null) }}>{t('cancel')}</Button>
           </div>
         </div>
       )}

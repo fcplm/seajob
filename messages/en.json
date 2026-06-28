@@ -175,6 +175,7 @@
     "institution": "Institution",
     "degree": "Degree",
     "field": "Field of Study",
+    "inField": "in",
     "language": "Language",
     "level": "Level",
     "skillName": "Skill",
