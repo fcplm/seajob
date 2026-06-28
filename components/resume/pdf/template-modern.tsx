@@ -34,9 +34,9 @@ export function TemplateModern({ data }: { data: PdfResumeData }) {
           <Text style={s.sectionTitle}>Sea Experience</Text>
           {experience.map(e => (
             <View key={e.id} style={s.entryBlock}>
-              <Text style={s.bold}>{e.position} — {e.vessel_name}</Text>
-              <Text style={s.muted}>{e.company}{e.flag ? ` · ${e.flag}` : ''} · {e.vessel_type}{e.grt ? ` · ${e.grt} GRT` : ''}</Text>
-              <Text style={s.muted}>{e.started_at} — {e.ended_at ?? 'Present'}</Text>
+              <Text style={s.bold}>{[e.position, e.vessel_name].filter(Boolean).join(' — ')}</Text>
+              <Text style={s.muted}>{[e.company, e.flag, e.vessel_type, e.grt ? `${e.grt} GRT` : null].filter(Boolean).join(' · ')}</Text>
+              <Text style={s.muted}>{[e.started_at, e.ended_at ?? 'Present'].filter(Boolean).join(' — ')}</Text>
             </View>
           ))}
         </>}
@@ -46,7 +46,7 @@ export function TemplateModern({ data }: { data: PdfResumeData }) {
           {certificates.map(c => (
             <View key={c.id} style={s.entryBlock}>
               <Text style={s.bold}>{c.name}</Text>
-              <Text style={s.muted}>{c.issued_by} · {c.issued_at}{c.expires_at ? ` — ${c.expires_at}` : ''}</Text>
+              <Text style={s.muted}>{[c.issued_by, [c.issued_at, c.expires_at].filter(Boolean).join(' — ')].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}
@@ -56,7 +56,7 @@ export function TemplateModern({ data }: { data: PdfResumeData }) {
           {education.map(e => (
             <View key={e.id} style={s.entryBlock}>
               <Text style={s.bold}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
-              <Text style={s.muted}>{e.institution} · {e.started_at} — {e.ended_at}</Text>
+              <Text style={s.muted}>{[e.institution, [e.started_at, e.ended_at].filter(Boolean).join(' — ')].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}
@@ -74,7 +74,7 @@ export function TemplateModern({ data }: { data: PdfResumeData }) {
           {references.map(r => (
             <View key={r.id} style={s.entryBlock}>
               <Text style={s.bold}>{r.full_name}</Text>
-              <Text style={s.muted}>{r.position}{r.company ? ` · ${r.company}` : ''} · {r.email}{r.phone ? ` · ${r.phone}` : ''}</Text>
+              <Text style={s.muted}>{[r.position, r.company, r.email, r.phone].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}

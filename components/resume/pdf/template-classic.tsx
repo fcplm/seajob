@@ -28,7 +28,7 @@ export function TemplateClassic({ data }: { data: PdfResumeData }) {
           {languages.length > 0 && <>
             <Text style={s.sectionTitle}>Languages</Text>
             <View style={s.rule} />
-            {languages.map(l => <Text key={l.id} style={{ marginBottom: 2 }}>{l.language} — {l.level}</Text>)}
+            {languages.map(l => <Text key={l.id} style={{ marginBottom: 2 }}>{[l.language, l.level].filter(Boolean).join(' — ')}</Text>)}
           </>}
 
           {skills.length > 0 && <>
@@ -58,10 +58,10 @@ export function TemplateClassic({ data }: { data: PdfResumeData }) {
             <View style={s.rule} />
             {experience.map(e => (
               <View key={e.id} style={s.entryBlock}>
-                <Text style={s.bold}>{e.position} — {e.vessel_name}</Text>
-                <Text style={s.muted}>{e.company}{e.flag ? ` · ${e.flag}` : ''}</Text>
-                <Text style={s.muted}>{e.vessel_type}{e.grt ? ` · ${e.grt} GRT` : ''}{e.dwt ? ` · ${e.dwt} DWT` : ''}</Text>
-                <Text style={s.muted}>{e.started_at} — {e.ended_at ?? 'Present'}</Text>
+                <Text style={s.bold}>{[e.position, e.vessel_name].filter(Boolean).join(' — ')}</Text>
+                <Text style={s.muted}>{[e.company, e.flag].filter(Boolean).join(' · ')}</Text>
+                <Text style={s.muted}>{[e.vessel_type, e.grt ? `${e.grt} GRT` : null, e.dwt ? `${e.dwt} DWT` : null].filter(Boolean).join(' · ')}</Text>
+                <Text style={s.muted}>{[e.started_at, e.ended_at ?? 'Present'].filter(Boolean).join(' — ')}</Text>
               </View>
             ))}
           </>}
@@ -73,7 +73,7 @@ export function TemplateClassic({ data }: { data: PdfResumeData }) {
               <View key={c.id} style={s.entryBlock}>
                 <Text style={s.bold}>{c.name}</Text>
                 <Text style={s.muted}>{c.issued_by}</Text>
-                <Text style={s.muted}>{c.issued_at}{c.expires_at ? ` — ${c.expires_at}` : ''}</Text>
+                <Text style={s.muted}>{[c.issued_at, c.expires_at].filter(Boolean).join(' — ')}</Text>
               </View>
             ))}
           </>}
@@ -85,7 +85,7 @@ export function TemplateClassic({ data }: { data: PdfResumeData }) {
               <View key={e.id} style={s.entryBlock}>
                 <Text style={s.bold}>{e.degree}{e.field ? ` in ${e.field}` : ''}</Text>
                 <Text style={s.muted}>{e.institution}</Text>
-                <Text style={s.muted}>{e.started_at} — {e.ended_at}</Text>
+                <Text style={s.muted}>{[e.started_at, e.ended_at].filter(Boolean).join(' — ')}</Text>
               </View>
             ))}
           </>}
@@ -96,8 +96,8 @@ export function TemplateClassic({ data }: { data: PdfResumeData }) {
             {references.map(r => (
               <View key={r.id} style={s.entryBlock}>
                 <Text style={s.bold}>{r.full_name}</Text>
-                <Text style={s.muted}>{r.position}{r.company ? ` · ${r.company}` : ''}</Text>
-                <Text style={s.muted}>{r.email}{r.phone ? ` · ${r.phone}` : ''}</Text>
+                <Text style={s.muted}>{[r.position, r.company].filter(Boolean).join(' · ')}</Text>
+                <Text style={s.muted}>{[r.email, r.phone].filter(Boolean).join(' · ')}</Text>
               </View>
             ))}
           </>}

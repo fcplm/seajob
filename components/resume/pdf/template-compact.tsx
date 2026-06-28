@@ -37,8 +37,8 @@ export function TemplateCompact({ data }: { data: PdfResumeData }) {
           <View style={s.rule} />
           {experience.map(e => (
             <View key={e.id} style={s.entryBlock}>
-              <Text style={s.bold}>{e.position} · {e.vessel_name}{e.flag ? ` (${e.flag})` : ''}</Text>
-              <Text style={s.muted}>{e.company} · {e.vessel_type}{e.grt ? ` · ${e.grt} GRT` : ''} · {e.started_at} — {e.ended_at ?? 'Present'}</Text>
+              <Text style={s.bold}>{[e.position, e.vessel_name ? (e.flag ? `${e.vessel_name} (${e.flag})` : e.vessel_name) : null].filter(Boolean).join(' · ')}</Text>
+              <Text style={s.muted}>{[e.company, e.vessel_type, e.grt ? `${e.grt} GRT` : null, [e.started_at, e.ended_at ?? 'Present'].filter(Boolean).join(' — ')].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}
@@ -49,7 +49,7 @@ export function TemplateCompact({ data }: { data: PdfResumeData }) {
           {certificates.map(c => (
             <View key={c.id} style={s.entryBlock}>
               <Text style={s.bold}>{c.name}</Text>
-              <Text style={s.muted}>{c.issued_by} · {c.issued_at}{c.expires_at ? ` — ${c.expires_at}` : ''}</Text>
+              <Text style={s.muted}>{[c.issued_by, [c.issued_at, c.expires_at].filter(Boolean).join(' — ')].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}
@@ -60,7 +60,7 @@ export function TemplateCompact({ data }: { data: PdfResumeData }) {
           {education.map(e => (
             <View key={e.id} style={s.entryBlock}>
               <Text style={s.bold}>{e.degree}{e.field ? ` · ${e.field}` : ''}</Text>
-              <Text style={s.muted}>{e.institution} · {e.started_at} — {e.ended_at}</Text>
+              <Text style={s.muted}>{[e.institution, [e.started_at, e.ended_at].filter(Boolean).join(' — ')].filter(Boolean).join(' · ')}</Text>
             </View>
           ))}
         </>}
@@ -79,7 +79,7 @@ export function TemplateCompact({ data }: { data: PdfResumeData }) {
           <View style={s.rule} />
           {references.map(r => (
             <View key={r.id} style={s.entryBlock}>
-              <Text style={s.bold}>{r.full_name} · {r.position}{r.company ? ` · ${r.company}` : ''}</Text>
+              <Text style={s.bold}>{[r.full_name, r.position, r.company].filter(Boolean).join(' · ')}</Text>
               <Text style={s.muted}>{r.email}{r.phone ? ` · ${r.phone}` : ''}</Text>
             </View>
           ))}

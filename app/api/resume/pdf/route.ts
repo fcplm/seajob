@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   if (!resume) return NextResponse.json({ error: 'no_resume' }, { status: 400 })
 
-  const isPro = profile?.subscription_status !== 'free'
+  const isPro = profile?.subscription_status === 'pro' || profile?.subscription_status === 'enterprise'
   if (!isPro && template !== 'classic') {
     return NextResponse.json({ error: 'pro_required' }, { status: 403 })
   }
@@ -72,7 +72,10 @@ export async function GET(request: NextRequest) {
   const element = createElement(TemplateComponent, { data: pdfData }) as ReactElement<DocumentProps>
   const buffer = await renderToBuffer(element)
 
-  const fullName = (profile?.full_name ?? 'seafarer').toLowerCase().replace(/\s+/g, '-')
+  const fullName = (profile?.full_name ?? 'seafarer')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
   const month = new Date().toISOString().slice(0, 7)
   const filename = `seajob-cv-${fullName}-${month}.pdf`
 
