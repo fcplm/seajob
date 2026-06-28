@@ -83,7 +83,9 @@ export async function updateExperience(id: string, data: Omit<ResumeExperience, 
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_experience').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_experience').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -93,7 +95,9 @@ export async function deleteExperience(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_experience').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_experience').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -119,7 +123,9 @@ export async function updateCertificate(id: string, data: Omit<ResumeCertificate
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_certificates').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_certificates').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -129,7 +135,9 @@ export async function deleteCertificate(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_certificates').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_certificates').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -155,7 +163,9 @@ export async function updateEducation(id: string, data: Omit<ResumeEducation, 'i
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_education').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_education').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -165,7 +175,9 @@ export async function deleteEducation(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_education').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_education').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -191,7 +203,9 @@ export async function updateLanguage(id: string, data: Omit<ResumeLanguage, 'id'
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_languages').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_languages').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -201,7 +215,9 @@ export async function deleteLanguage(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_languages').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_languages').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -227,7 +243,9 @@ export async function updateSkill(id: string, data: Omit<ResumeSkill, 'id' | 're
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_skills').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_skills').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -237,7 +255,9 @@ export async function deleteSkill(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_skills').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_skills').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -263,7 +283,9 @@ export async function updateReference(id: string, data: Omit<ResumeReference, 'i
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_references').update(data).eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_references').update(data).eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
@@ -273,7 +295,9 @@ export async function deleteReference(id: string) {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'unauthenticated' }
-  const { error } = await supabase.from('resume_references').delete().eq('id', id)
+  const resumeId = await ensureResume(supabase, user.id)
+  if (!resumeId) return { error: 'resume_not_found' }
+  const { error } = await supabase.from('resume_references').delete().eq('id', id).eq('resume_id', resumeId)
   if (error) return { error: error.message }
   revalidatePath('/', 'layout')
   return { success: true }
