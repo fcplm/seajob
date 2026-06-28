@@ -119,7 +119,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
             <Field label={t('endDate')}><Input type="date" value={form.ended_at ?? ''} onChange={e => setField('ended_at', e.target.value)} /></Field>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleSave} disabled={saving}>{saving ? t('saving') : t('save')}</Button>
+            <Button size="sm" onClick={handleSave} disabled={saving || (!form.position?.trim() && !form.vessel_name?.trim())}>{saving ? t('saving') : t('save')}</Button>
             <Button size="sm" variant="outline" onClick={() => { setAdding(false); setEditingId(null) }}>{t('cancel')}</Button>
           </div>
         </div>

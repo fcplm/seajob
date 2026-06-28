@@ -91,7 +91,7 @@ export function SectionLanguages({ initialData, onComplete }: Props) {
             </div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleSave} disabled={saving}>{saving ? t('saving') : t('save')}</Button>
+            <Button size="sm" onClick={handleSave} disabled={saving || !form.language?.trim()}>{saving ? t('saving') : t('save')}</Button>
             <Button size="sm" variant="outline" onClick={() => { setAdding(false); setEditingId(null) }}>{t('cancel')}</Button>
           </div>
         </div>

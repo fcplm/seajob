@@ -88,7 +88,7 @@ export function SectionReferences({ initialData, onComplete }: Props) {
             <div className="flex flex-col gap-1"><Label>{t('refPhone')}</Label><Input type="tel" value={form.phone ?? ''} onChange={e => setField('phone', e.target.value)} /></div>
           </div>
           <div className="flex gap-2">
-            <Button size="sm" onClick={handleSave} disabled={saving}>{saving ? t('saving') : t('save')}</Button>
+            <Button size="sm" onClick={handleSave} disabled={saving || !form.full_name?.trim()}>{saving ? t('saving') : t('save')}</Button>
             <Button size="sm" variant="outline" onClick={() => { setAdding(false); setEditingId(null) }}>{t('cancel')}</Button>
           </div>
         </div>
