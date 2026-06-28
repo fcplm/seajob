@@ -24,6 +24,7 @@ Four sub-systems planned:
 | Styling | Tailwind CSS + shadcn/ui (Default/Slate/Radix) |
 | i18n | next-intl v4, `/en/` and `/ru/` URL routing |
 | Database & Auth | Supabase (PostgreSQL + RLS + OAuth) |
+| PDF | @react-pdf/renderer |
 | Email | Resend (planned — not yet implemented) |
 | Payments | Stripe placeholder UI (no real integration yet) |
 | Testing | Playwright (Chromium) |
@@ -34,23 +35,24 @@ Four sub-systems planned:
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| **Foundation** | ✅ Complete | All 9 tasks done, 6/6 E2E tests passing |
-| **Resume Builder** | ✅ Complete | All tasks done, E2E tests passing |
-| **Vacancies Board** | Not started | |
+| **Foundation** | ✅ Complete | Auth, dashboard, profile, i18n, E2E |
+| **Resume Builder** | ✅ Complete | All tasks done, 8/8 E2E tests passing |
+| **Vacancies Board** | Not started | Next phase |
 | **CV Sender** | Not started | |
 
 ---
 
-## Supabase — Real Project Connected (Session 2)
+## Supabase — Real Project Connected
 
-`.env.local` has been updated with real credentials:
+`.env.local` has real credentials (URL + anon key). Both SQL migrations have been run.
+
 - **Project ID:** `hsydttnoxavrdlmidjsb`
-- **URL:** `https://<project-id>.supabase.co`
-- **Anon key:** `<see .env.local>`
+- Credentials: see `.env.local` only
 
-### Foundation SQL migration still needs to be run
+### Both migrations are ALREADY RUN — do not run again
 
-Before logging in will work, run this in Supabase → SQL Editor:
+<details>
+<summary>Foundation SQL (profiles table) — already applied</summary>
 
 ```sql
 create table profiles (
@@ -76,148 +78,100 @@ $$ language plpgsql security definer;
 create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
 ```
+</details>
 
-### Resume Builder SQL migration also needs to be run
+<details>
+<summary>Resume Builder SQL (7 tables) — already applied</summary>
 
 ```sql
-create table resumes (
-  id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users unique not null,
-  bio text, availability_date date, contract_duration text,
-  salary_expectation text, template text not null default 'classic',
-  created_at timestamptz default now(), updated_at timestamptz default now()
-);
-alter table resumes enable row level security;
-create policy "Users manage own resume" on resumes for all using (auth.uid() = user_id);
-
-create table resume_experience (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  vessel_name text, vessel_type text, grt int, dwt int, flag text,
-  company text, position text, started_at date, ended_at date, sort_order int not null default 0
-);
-alter table resume_experience enable row level security;
-create policy "Users manage own experience" on resume_experience for all using (auth.uid() = (select user_id from resumes where id = resume_id));
-
-create table resume_certificates (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  name text, issued_by text, issued_at date, expires_at date, sort_order int not null default 0
-);
-alter table resume_certificates enable row level security;
-create policy "Users manage own certificates" on resume_certificates for all using (auth.uid() = (select user_id from resumes where id = resume_id));
-
-create table resume_education (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  institution text, degree text, field text, started_at date, ended_at date, sort_order int not null default 0
-);
-alter table resume_education enable row level security;
-create policy "Users manage own education" on resume_education for all using (auth.uid() = (select user_id from resumes where id = resume_id));
-
-create table resume_languages (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  language text, level text, sort_order int not null default 0
-);
-alter table resume_languages enable row level security;
-create policy "Users manage own languages" on resume_languages for all using (auth.uid() = (select user_id from resumes where id = resume_id));
-
-create table resume_skills (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  name text, sort_order int not null default 0
-);
-alter table resume_skills enable row level security;
-create policy "Users manage own skills" on resume_skills for all using (auth.uid() = (select user_id from resumes where id = resume_id));
-
-create table resume_references (
-  id uuid primary key default gen_random_uuid(),
-  resume_id uuid references resumes on delete cascade not null,
-  full_name text, position text, company text, email text, phone text, sort_order int not null default 0
-);
-alter table resume_references enable row level security;
-create policy "Users manage own references" on resume_references for all using (auth.uid() = (select user_id from resumes where id = resume_id));
+create table resumes ( id uuid primary key default gen_random_uuid(), user_id uuid references auth.users unique not null, bio text, availability_date date, contract_duration text, salary_expectation text, template text not null default 'classic', created_at timestamptz default now(), updated_at timestamptz default now() );
+-- (+ 6 child tables: resume_experience, resume_certificates, resume_education, resume_languages, resume_skills, resume_references with RLS)
 ```
+</details>
 
 ---
 
-## Resume Builder — What's Done / What's Left
+## Resume Builder — What Was Built (Session 3)
 
-### Done
-- ✅ Task 1: DB types (`lib/supabase/types.ts`) + i18n strings (`messages/en.json`, `messages/ru.json`) — commit `234af33`
-- ✅ Design spec: `docs/superpowers/specs/2026-06-28-resume-builder-design.md`
-- ✅ Implementation plan: `docs/superpowers/plans/2026-06-28-resume-builder.md`
-
-### Pending (Tasks 3–9)
-- Task 3: Server actions (`actions/resume.ts`)
-- Task 4: shadcn accordion/textarea + `completeness-bar.tsx` + `template-picker.tsx`
-- Task 5: `section-personal.tsx` + `section-preferences.tsx`
-- Task 6: All 6 list section components
-- Task 7: `resume-editor.tsx` + dashboard resume page + fix `hasResume`
-- Task 8: PDF templates + `/api/resume/pdf` route handler
-- Task 9: E2E tests + final build verification
-
-### Next session — start here
-Say **"продолжай с Task 3"** and execution will resume from Task 3 using subagent-driven development.
-
-SDD progress ledger: `.superpowers/sdd/progress.md`
-Plan file: `docs/superpowers/plans/2026-06-28-resume-builder.md`
-
----
-
-## Foundation — What Was Built (Session 1)
-
-### Commits (oldest → newest)
+### Key commits (oldest → newest)
 
 | Hash | Description |
 |------|-------------|
-| `1db2e2a` | Initial commit |
-| `d46b896` | Foundation design spec |
-| `6835ba1` | Foundation implementation plan |
-| `bd622b3` | Init Next.js 14 + shadcn/ui + Supabase deps |
-| `dd2eed3` | Reinit shadcn Default/Slate, fix duplicate fonts |
-| `8b164f5` | Remove unused `@base-ui/react`, `tw-animate-css` |
-| `7376c4a` | next-intl i18n with RU/EN messages |
-| `236408f` | Middleware: i18n routing + dashboard auth guard |
-| `817960d` | Supabase client, server client, types, DB schema |
-| `95615e9` | Auth pages, server actions, Google OAuth, E2E tests |
-| `c6dba77` | Fix auth i18n, unused import, OAuth callback errors |
-| `592baf0` | Landing page with all sections + lang switcher |
-| `8873921` | Move all landing strings to i18n |
-| `aa5ddd0` | Dashboard layout: sidebar + mobile bottom bar |
-| `abf1c26` | Dashboard home widgets |
-| `55160ca` | Fix resumeCreated string, profile type cast |
-| `669b200` | Dashboard sub-pages: profile, settings, placeholders |
-| `9ee8d2c` | Fix profile form remount, saving key, fetch errors |
-| `588a0b8` | Final fixes: boilerplate cleanup, redirect flow, fleet_type null, popular badge, callback locale guard |
-| `234af33` | Resume Builder: DB types + i18n strings |
+| `234af33` | DB types + i18n strings |
+| `9e1a03e` | Resume server actions |
+| `43d18e9` | Fix: scope update/delete to user's own resume |
+| `518c77d` | accordion/textarea + completeness-bar + template-picker |
+| `38bfea6` | Fix: i18n Pro badge |
+| `423233a` | section-personal + section-preferences |
+| `f52593a` | Fix: i18n placeholder strings |
+| `53a7678` | All 6 list section components |
+| `46c9e6c` | Fix: i18n + dedup form JSX |
+| `f3d5a3a` | resume-editor + dashboard resume page |
+| `e786be8` | PDF templates + /api/resume/pdf route |
+| `9b7157a` | Fix: isPro allowlist + null-safe separators in PDF |
+| `6acb197` | Fix: null-safe language level in compact/modern PDF |
+| `59fccbc` | E2E tests for resume builder |
+| `0cc8211` | Fix: isPro UI consistency, ensureResume upsert, education date, PDF filename |
+| `152e8b6` | Feat: save button disabled when required field empty |
 
-### Key Files
+### Key new files
 
 ```
-app/
-  layout.tsx                    — pass-through root layout (lang attr lives in locale layout)
-  [locale]/
-    layout.tsx                  — html/body, fonts, NextIntlClientProvider
-    page.tsx                    — landing page
-    auth/callback/route.ts      — OAuth callback
-    dashboard/
-      layout.tsx                — sidebar + bottom bar
-      page.tsx                  — dashboard home
-      profile/page.tsx          — profile edit form
-      settings/page.tsx         — settings (lang switcher)
-      resume|vacancies|sender|notifications/page.tsx  — placeholders (resume will be replaced)
-actions/auth.ts                 — login, signup, logout, updateProfile server actions
-components/
-  auth/login-form.tsx signup-form.tsx
-  layout/header.tsx sidebar.tsx bottom-bar.tsx footer.tsx
-  dashboard/profile-card.tsx subscription-widget.tsx resume-widget.tsx ...
+actions/resume.ts                        — 20 server actions (CRUD for all sections)
+components/resume/
+  completeness-bar.tsx                   — progress bar component
+  template-picker.tsx                    — Classic/Modern/Compact picker with Pro gating
+  section-personal.tsx                   — bio textarea
+  section-preferences.tsx                — availability, contract, salary
+  section-experience.tsx                 — sea experience (vessel, company, dates)
+  section-certificates.tsx               — certificates (name, issuer, dates)
+  section-education.tsx                  — education (institution, degree, field)
+  section-languages.tsx                  — languages with CEFR level select
+  section-skills.tsx                     — skills as badge chips
+  section-references.tsx                 — references (name, position, contact)
+  resume-editor.tsx                      — accordion editor assembling all sections
+  pdf/
+    template-classic.tsx                 — Classic PDF layout
+    template-modern.tsx                  — Modern PDF layout
+    template-compact.tsx                 — Compact PDF layout (Pro only)
+app/[locale]/dashboard/resume/page.tsx  — server component, fetches all resume data
+app/api/resume/pdf/route.ts             — PDF generation (auth → fetch → render → stream)
+e2e/resume.spec.ts                      — Playwright tests
+```
+
+### How it works
+
+- `/en/dashboard/resume` — server component fetches profile + all 7 resume tables in parallel, passes to `<ResumeEditor>`
+- `<ResumeEditor>` — client component with shadcn Accordion, tracks completeness per section
+- Save in each section calls a server action → revalidates
+- Download PDF → `/api/resume/pdf?template=classic` → auth check → renders `@react-pdf/renderer` template → streams PDF
+- Free users: Classic template only. Pro/Enterprise: all 3 templates
+
+---
+
+## Next Session — Vacancies Board
+
+Start with brainstorming: **"начнём с Vacancies Board"**
+
+---
+
+## Foundation — Key Files
+
+```
+app/[locale]/
+  layout.tsx                  — html/body, fonts, NextIntlClientProvider
+  page.tsx                    — landing page
+  auth/callback/route.ts      — OAuth callback
+  dashboard/
+    layout.tsx                — sidebar + bottom bar
+    page.tsx                  — dashboard home (hasResume now live query)
+    profile/page.tsx          — profile edit form
+    settings/page.tsx         — settings (lang switcher)
+actions/auth.ts               — login, signup, logout, updateProfile
 lib/supabase/client.ts server.ts types.ts
-i18n/request.ts
 messages/en.json ru.json
 middleware.ts
-e2e/auth.spec.ts navigation.spec.ts
+e2e/auth.spec.ts navigation.spec.ts resume.spec.ts
 ```
 
 ---
@@ -226,7 +180,9 @@ e2e/auth.spec.ts navigation.spec.ts
 
 | Item | Severity | Notes |
 |------|----------|-------|
-| Profile card shows raw DB fleet_type value | Minor | Needs async server component or client translation |
-| `nav.about` key exists but no About page/anchor | Minor | Dead translation key |
-| Analytics widget shows 0/0 | By design | CV Sender sub-project will fix this |
-| Stripe payments are placeholder UI | By design | Real integration is a future phase |
+| Profile card shows raw DB fleet_type value | Minor | Needs client translation |
+| `nav.about` key exists but no About page | Minor | Dead i18n key |
+| Analytics widget shows 0/0 | By design | CV Sender phase will fix |
+| Stripe payments are placeholder UI | By design | Future phase |
+| PDF download error not shown as toast | Minor | pdfError i18n key exists but unused |
+| Form validation client-side only | Minor | Server actions already guard ownership |
