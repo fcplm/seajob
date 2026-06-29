@@ -1,10 +1,26 @@
 {
   "nav": {
     "vacancies": "Vacancies",
+    "resume": "Resume",
+    "cvSender": "CV Sender",
+    "forCompanies": "For Companies",
     "pricing": "Pricing",
     "about": "About",
     "login": "Log in",
     "getStarted": "Get Started"
+  },
+  "landing": {
+    "tickerLabel": "New vacancies",
+    "heroSub": "Build your seafarer profile, find your next position, send your CV directly to employers. No agents, no fees.",
+    "browseVacancies": "Browse vacancies",
+    "statsCompanies": "Shipping companies",
+    "statsHired": "Seafarers hired",
+    "statsFleets": "Fleet types",
+    "statsResponse": "First response",
+    "freshVacancies": "Fresh vacancies",
+    "allVacancies": "All vacancies",
+    "photoBandHeadline": "Work at sea",
+    "photoBandSub": "without the hassle."
   },
   "hero": {
     "headline": "Find Your Next Maritime Job — Fast",
@@ -13,12 +29,12 @@
   },
   "howItWorks": {
     "title": "How It Works",
-    "step1Title": "Build Your Resume",
-    "step1Desc": "Fill in your seafarer profile using our guided builder.",
-    "step2Title": "Find a Vacancy",
-    "step2Desc": "Browse jobs filtered by fleet type and rank.",
-    "step3Title": "Send Your CV",
-    "step3Desc": "Blast your resume to hundreds of employers in seconds."
+    "step1Title": "Build your resume",
+    "step1Desc": "Fill in your experience, ranks, and certificates. The platform generates a PDF in the professional maritime format that any crewing manager will recognise.",
+    "step2Title": "Find a vacancy",
+    "step2Desc": "Filter by fleet type, rank, and salary. Apply directly — no agency fees, no middlemen.",
+    "step3Title": "CV broadcast",
+    "step3Desc": "We send your resume to companies that match your profile. One click instead of hundreds of emails."
   },
   "features": {
     "title": "Everything You Need",
@@ -130,6 +146,23 @@
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
     "deleteWarning": "This action cannot be undone."
+  },
+  "vacancies": {
+    "title": "Vacancies",
+    "filterAll": "All",
+    "filterContainer": "Container",
+    "filterTanker": "Tanker",
+    "filterOffshore": "Offshore",
+    "filterBulk": "Bulk",
+    "filterCruise": "Cruise",
+    "apply": "Apply",
+    "viewOnSite": "View on site",
+    "applied": "Resume sent!",
+    "applyError": "Failed to send. Try again.",
+    "noResume": "Create your resume first",
+    "noResumeLink": "Go to Resume",
+    "urgent": "Urgent",
+    "noVacancies": "No vacancies yet — sync will run hourly."
   },
   "resume": {
     "title": "My Resume",

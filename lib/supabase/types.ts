@@ -93,6 +93,22 @@ export type ResumeData = {
   references: ResumeReference[]
 }
 
+export type Vacancy = {
+  id: string
+  external_id: string
+  source: string
+  rank: string | null
+  company: string | null
+  vessel_type: string | null
+  salary: string | null
+  description: string | null
+  contact_email: string | null
+  url: string | null
+  posted_at: string | null
+  is_urgent: boolean
+  created_at: string
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -142,6 +158,12 @@ export type Database = {
         Row: ResumeReference
         Insert: Omit<ResumeReference, 'id'>
         Update: Partial<Omit<ResumeReference, 'id' | 'resume_id'>>
+        Relationships: []
+      }
+      vacancies: {
+        Row: Vacancy
+        Insert: Omit<Vacancy, 'id' | 'created_at'>
+        Update: Partial<Omit<Vacancy, 'id' | 'created_at'>>
         Relationships: []
       }
     }
