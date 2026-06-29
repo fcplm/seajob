@@ -37,7 +37,7 @@ Four sub-systems planned:
 |-------|--------|-------|
 | **Foundation** | ✅ Complete | Auth, dashboard, profile, i18n, E2E |
 | **Resume Builder** | ✅ Complete | All tasks done, 8/8 E2E tests passing |
-| **Vacancies Board** | Not started | Next phase |
+| **Vacancies Board** | ✅ Complete | All tasks done, 11/13 E2E tests passing (2 skipped — need credentials) |
 | **CV Sender** | Not started | |
 
 ---
@@ -149,9 +149,40 @@ e2e/resume.spec.ts                      — Playwright tests
 
 ---
 
-## Next Session — Vacancies Board
+## Vacancies Board — What Was Built (Session 4)
 
-Start with brainstorming: **"начнём с Vacancies Board"**
+### Key commits (oldest → newest)
+
+| Hash | Description |
+|------|-------------|
+| `53d39e7` | DB types, i18n strings, deps, vercel cron config |
+| `b454c2a` | RSS parser + `/api/vacancies/sync` route (Vercel cron) |
+| `3076f5b` | Vacancies board UI — page, card grid, fleet-type filters |
+| `7654075` | `applyToVacancy` server action — PDF attachment + Resend email |
+| `9e56efa` | E2E tests for vacancies + playwright config port fix |
+
+### Key new files
+
+```
+app/[locale]/dashboard/vacancies/page.tsx  — server component, fetches vacancies from Supabase
+components/resume/vacancy-card.tsx         — card with apply button
+components/resume/vacancy-filters.tsx      — fleet-type filter chips
+app/api/vacancies/sync/route.ts            — cron endpoint: fetch XML RSS → upsert to Supabase
+actions/resume.ts (applyToVacancy)         — builds PDF resume + emails employer via Resend
+e2e/vacancies.spec.ts                      — Playwright tests (3 unauthenticated + 1 skipped)
+```
+
+### How it works
+
+- Vercel cron job hits `/api/vacancies/sync` every hour → parses ITF/maritime RSS feed → upserts `vacancies` table
+- `/en/dashboard/vacancies` — server component, reads `vacancies` table, supports fleet_type filter param
+- Apply button calls `applyToVacancy` server action → fetches user's resume → renders PDF → emails employer
+
+### Playwright config note
+
+Port 3000 was in use by a different process during testing, so `playwright.config.ts` was updated to use `PORT=3001`. This is the permanent correct config — dev server for SeaJob runs on 3001 when port 3000 is occupied.
+
+## Next Session — CV Sender
 
 ---
 
