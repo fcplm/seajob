@@ -41,7 +41,10 @@ export function LoginForm({ locale }: { locale: string }) {
 
   return (
     <div className="flex flex-col gap-4 w-full max-w-sm mx-auto">
-      <h1 className="text-2xl font-bold text-center">{t('loginTitle')}</h1>
+      <div className="text-center mb-2">
+        <span className="font-display text-3xl tracking-tight" style={{ color: '#0c2461' }}>SeaJob</span>
+      </div>
+      <h1 className="text-xl font-semibold text-center" style={{ color: '#1a2540' }}>{t('loginTitle')}</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <Label htmlFor="email">{t('email')}</Label>

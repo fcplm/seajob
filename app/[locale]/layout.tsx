@@ -1,18 +1,23 @@
+import '@/app/globals.css'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Toaster } from 'sonner'
-import localFont from 'next/font/local'
+import { DM_Serif_Display, DM_Sans } from 'next/font/google'
 
-const geistSans = localFont({
-  src: '../fonts/GeistVF.woff',
-  variable: '--font-sans',
-  weight: '100 900',
+const dmSerifDisplay = DM_Serif_Display({
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
 })
-const geistMono = localFont({
-  src: '../fonts/GeistMonoVF.woff',
-  variable: '--font-mono',
-  weight: '100 900',
+
+const dmSans = DM_Sans({
+  weight: ['400', '500', '600', '700', '800'],
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
 })
 
 const locales = ['en', 'ru']
@@ -29,7 +34,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${dmSerifDisplay.variable} ${dmSans.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           {children}
           <Toaster position="top-right" />

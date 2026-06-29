@@ -19,12 +19,9 @@ const config = {
   	},
   	extend: {
   		fontFamily: {
-  			sans: [
-  				'var(--font-sans)'
-  			],
-  			mono: [
-  				'var(--font-mono)'
-  			]
+  			sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+  			mono: ['var(--font-mono)'],
+  			display: ['var(--font-display)', 'serif'],
   		},
   		colors: {
   			border: 'hsl(var(--border))',

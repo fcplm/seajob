@@ -1,9 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import type { Metadata } from 'next'
@@ -13,18 +10,249 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   return { title: `SeaJob — ${t('headline')}`, description: t('subheadline') }
 }
 
+const TICKER_ITEMS = [
+  { rank: 'Капитан', co: 'Bulk Carrier, Pacific Maritime' },
+  { rank: 'Chief Mate', co: 'Chemical Tanker, Stolt' },
+  { rank: '2nd Engineer', co: 'AHTS, Bourbon Offshore' },
+  { rank: 'ETO', co: 'Cruise, MSC' },
+  { rank: 'Bosun', co: 'Container, Evergreen' },
+  { rank: '3rd Officer', co: 'Ro-Pax, Grimaldi' },
+  { rank: 'Chief Engineer', co: 'Tanker, Odfjell' },
+  { rank: 'AB Seaman', co: 'Bulk, Pacific Maritime' },
+]
+
+const VACANCIES = [
+  { rank: 'Captain', co: 'Odfjell', type: 'Bulk', salary: '$12,000' },
+  { rank: 'Chief Engineer', co: 'Bourbon', type: 'Offshore', salary: '$10,500' },
+  { rank: '2nd Officer', co: 'CMA CGM', type: 'Container', salary: '$4,800' },
+  { rank: '3rd Engineer', co: 'Grimaldi', type: 'Ro-Ro', salary: '$4,200' },
+  { rank: 'Электромеханик', co: 'MSC', type: 'Cruise', salary: '$5,600' },
+  { rank: 'Bosun', co: 'Nordic Tankers', type: 'Tanker', salary: '$3,100' },
+]
+
+function Ticker() {
+  const t = useTranslations('landing')
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS]
+
+  return (
+    <div
+      className="overflow-hidden h-9 flex items-center border-b"
+      style={{ background: '#c8d8ee', borderColor: '#a8bcd8' }}
+    >
+      <div
+        className="flex-shrink-0 text-[10px] font-bold tracking-[2px] uppercase px-12 pr-6 border-r mr-6"
+        style={{ color: '#94a3b8', borderColor: '#9ab0cc', whiteSpace: 'nowrap' }}
+      >
+        {t('tickerLabel')}
+      </div>
+      <div className="flex gap-7 items-center overflow-hidden" style={{ whiteSpace: 'nowrap' }}>
+        {items.map((item, i) => (
+          <div key={i} className="flex items-center gap-1.5 text-xs flex-shrink-0">
+            <span className="font-bold" style={{ color: '#0c2461' }}>{item.rank}</span>
+            <span style={{ color: '#b8cce8' }}>/</span>
+            <span style={{ color: '#64748b' }}>{item.co}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function HeroSection({ locale }: { locale: string }) {
   const t = useTranslations('hero')
+  const tl = useTranslations('landing')
+
   return (
-    <section className="py-24 px-4 text-center bg-gradient-to-b from-background to-muted/30">
-      <div className="container mx-auto max-w-3xl">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">{t('headline')}</h1>
-        <p className="text-xl text-muted-foreground mb-10">{t('subheadline')}</p>
-        <Link href={`/${locale}/signup`}>
-          <Button size="lg" className="text-base px-8">{t('cta')}</Button>
+    <div
+      className="mx-auto px-12 py-16 grid gap-16 items-center"
+      style={{ maxWidth: 1080, gridTemplateColumns: '1fr 380px' }}
+    >
+      <div>
+        <h1
+          className="font-display text-[52px] leading-[1.02] tracking-[-1.5px] mb-4"
+          style={{ color: '#0c2461' }}
+        >
+          {locale === 'ru' ? (
+            <>Следующая<br />вахта<br /><em style={{ color: '#1d4ed8' }}>уже ждёт.</em></>
+          ) : (
+            <>Your next<br />voyage<br /><em style={{ color: '#1d4ed8' }}>starts here.</em></>
+          )}
+        </h1>
+        <p className="text-[15px] leading-relaxed mb-7 max-w-[360px]" style={{ color: '#64748b' }}>
+          {tl('heroSub')}
+        </p>
+        <div className="flex items-center gap-5">
+          <Link
+            href={`/${locale}/signup`}
+            className="inline-block bg-primary text-white text-sm font-semibold px-6 py-2.5 rounded-lg transition-colors hover:opacity-90 active:translate-y-px"
+          >
+            {t('cta')}
+          </Link>
+          <Link
+            href={`/${locale}#vacancies`}
+            className="text-sm font-medium border-b pb-px transition-colors"
+            style={{ color: '#0c2461', borderColor: '#c7d7f0' }}
+          >
+            {tl('browseVacancies')}
+          </Link>
+        </div>
+      </div>
+
+      {/* Demo job card */}
+      <div
+        className="bg-card rounded-xl p-6"
+        style={{
+          border: '1px solid #b8cce0',
+          boxShadow: '0 1px 3px rgba(12,36,97,0.08), 0 8px 24px rgba(12,36,97,0.12), 0 32px 48px rgba(12,36,97,0.07)',
+        }}
+      >
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <div className="text-lg font-bold tracking-tight" style={{ color: '#0c2461' }}>Chief Officer</div>
+            <div className="text-xs mt-0.5" style={{ color: '#94a3b8' }}>Stolt Tankers B.V.</div>
+          </div>
+          <span
+            className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded"
+            style={{ color: '#1d4ed8', background: '#dce6f4', letterSpacing: '0.8px' }}
+          >
+            Танкер
+          </span>
+        </div>
+
+        <div className="flex flex-col gap-2 mb-4">
+          {[
+            { label: 'Контракт', value: '4 мес. + 2 отпуск' },
+            { label: 'Флаг', value: 'Marshall Islands' },
+            { label: 'Судно', value: '37,000 DWT Chemical tanker' },
+            { label: 'Требования', value: 'STCW II/2, ECDIS, BRM' },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex items-start gap-2.5 text-[12.5px]">
+              <span className="text-[11px] font-medium w-[68px] shrink-0 pt-px" style={{ color: '#b0bcd4' }}>{label}</span>
+              <span style={{ color: '#334155' }}>{value}</span>
+            </div>
+          ))}
+        </div>
+
+        <hr style={{ borderColor: '#cddaee', margin: '16px 0' }} />
+
+        <div className="flex justify-between items-end">
+          <div>
+            <div className="text-[22px] font-extrabold tracking-tight" style={{ color: '#0c2461' }}>$8,500 / мес</div>
+            <div className="text-[10px] mt-0.5" style={{ color: '#94a3b8' }}>до вычета налогов</div>
+          </div>
+          <span className="text-[11px]" style={{ color: '#94a3b8' }}>12 откликов</span>
+        </div>
+
+        <button
+          className="w-full mt-4 bg-primary text-white text-[13px] font-semibold py-2.5 rounded-lg transition-opacity hover:opacity-90 active:translate-y-px"
+        >
+          Откликнуться
+        </button>
+        <div className="text-center text-[10.5px] mt-2.5" style={{ color: '#c7d5e8' }}>
+          Опубликовано 2 дня назад
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StatsBar() {
+  const t = useTranslations('landing')
+  const stats = [
+    { num: '847', label: t('statsCompanies') },
+    { num: '2,340', label: t('statsHired') },
+    { num: '18', label: t('statsFleets') },
+    { num: '24ч', label: t('statsResponse') },
+  ]
+
+  return (
+    <div style={{ borderTop: '1px solid #b8cce0', borderBottom: '1px solid #b8cce0' }}>
+      <div
+        style={{ maxWidth: 1080 }}
+        className="mx-auto px-12 py-5 flex"
+      >
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className="flex-1 px-7"
+            style={{
+              paddingLeft: i === 0 ? 0 : undefined,
+              borderRight: i < stats.length - 1 ? '1px solid #b8cce0' : undefined,
+            }}
+          >
+            <div className="text-2xl font-extrabold tracking-tight leading-none" style={{ color: '#0c2461' }}>
+              {s.num}
+            </div>
+            <div className="text-[11px] mt-1" style={{ color: '#94a3b8' }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PhotoBand() {
+  const t = useTranslations('landing')
+  return (
+    <div className="relative w-full overflow-hidden" style={{ height: 220 }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="https://picsum.photos/seed/cargo-ship-sea-harbor/1400/220"
+        alt="Грузовое судно в порту"
+        className="w-full h-full object-cover"
+        style={{ objectPosition: 'center 40%', filter: 'saturate(0.7) brightness(0.92)' }}
+        loading="lazy"
+      />
+      <div
+        className="absolute inset-0"
+        style={{ background: 'linear-gradient(90deg, rgba(12,36,97,0.55) 0%, transparent 50%, rgba(12,36,97,0.2) 100%)' }}
+      />
+      <div className="absolute left-12 top-1/2 -translate-y-1/2">
+        <p className="font-display text-[22px] text-white leading-snug tracking-tight max-w-[300px]">
+          {t('photoBandHeadline')}<br />
+          <em className="font-display" style={{ color: 'rgba(255,255,255,0.75)' }}>{t('photoBandSub')}</em>
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function VacanciesSection({ locale }: { locale: string }) {
+  const t = useTranslations('landing')
+  return (
+    <div id="vacancies" style={{ maxWidth: 1080 }} className="mx-auto px-12 py-10">
+      <div className="flex justify-between items-baseline mb-5">
+        <div className="text-[10px] font-bold tracking-[2.5px] uppercase" style={{ color: '#94a3b8' }}>
+          {t('freshVacancies')}
+        </div>
+        <Link
+          href={`/${locale}/dashboard/vacancies`}
+          className="text-[12.5px] font-medium hover:underline"
+          style={{ color: '#1d4ed8' }}
+        >
+          {t('allVacancies')}
         </Link>
       </div>
-    </section>
+      <div className="grid gap-2" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        {VACANCIES.map((v) => (
+          <div
+            key={`${v.rank}-${v.co}`}
+            className="bg-card flex items-center gap-3 px-4 py-3 rounded-lg cursor-pointer transition-all hover:shadow-sm"
+            style={{ border: '1px solid #b8cce0' }}
+          >
+            <span className="text-[13px] font-bold w-[135px] shrink-0" style={{ color: '#0c2461' }}>{v.rank}</span>
+            <span className="flex-1 text-xs" style={{ color: '#64748b' }}>{v.co}</span>
+            <span
+              className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+              style={{ color: '#94a3b8', background: '#dce6f4', border: '1px solid #b8cce0' }}
+            >
+              {v.type}
+            </span>
+            <span className="text-[13px] font-bold w-14 text-right shrink-0" style={{ color: '#0c2461' }}>{v.salary}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -35,110 +263,49 @@ function HowItWorksSection() {
     { num: '02', title: t('step2Title'), desc: t('step2Desc') },
     { num: '03', title: t('step3Title'), desc: t('step3Desc') },
   ]
+
   return (
-    <section className="py-20 px-4" id="how-it-works">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">{t('title')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((s) => (
-            <div key={s.num} className="flex flex-col items-center text-center gap-3">
-              <span className="text-5xl font-bold text-muted-foreground/30">{s.num}</span>
-              <h3 className="font-semibold text-lg">{s.title}</h3>
-              <p className="text-muted-foreground text-sm">{s.desc}</p>
+    <div
+      id="how-it-works"
+      style={{ borderTop: '1px solid #b8cce0', borderBottom: '1px solid #b8cce0', background: '#c8d8ee' }}
+    >
+      <div style={{ maxWidth: 1080 }} className="mx-auto px-12 py-12">
+        <h2
+          className="font-display text-[28px] tracking-tight mb-9"
+          style={{ color: '#0c2461' }}
+        >
+          {t('title')}
+        </h2>
+        <div className="flex flex-col">
+          {steps.map((s, i) => (
+            <div
+              key={s.num}
+              className="grid gap-6 items-start py-7"
+              style={{
+                gridTemplateColumns: '80px 1fr',
+                borderTop: '1px solid #b8cce0',
+                borderBottom: i === steps.length - 1 ? '1px solid #b8cce0' : undefined,
+              }}
+            >
+              <span
+                className="font-display text-[40px] leading-none tracking-tight select-none"
+                style={{ color: '#a8bcd8' }}
+              >
+                {s.num}
+              </span>
+              <div>
+                <div className="text-[15px] font-bold tracking-tight mb-1.5" style={{ color: '#0c2461' }}>
+                  {s.title}
+                </div>
+                <p className="text-[13.5px] leading-relaxed max-w-[480px]" style={{ color: '#64748b' }}>
+                  {s.desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </section>
-  )
-}
-
-function FeaturesSection() {
-  const t = useTranslations('features')
-  const features = [
-    { title: t('resumeTitle'), desc: t('resumeDesc'), icon: '📄' },
-    { title: t('vacanciesTitle'), desc: t('vacanciesDesc'), icon: '🔍' },
-    { title: t('senderTitle'), desc: t('senderDesc'), icon: '📧' },
-  ]
-  return (
-    <section className="py-20 px-4 bg-muted/30" id="features">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">{t('title')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((f) => (
-            <Card key={f.title}>
-              <CardHeader>
-                <div className="text-4xl mb-2">{f.icon}</div>
-                <CardTitle>{f.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground text-sm">{f.desc}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function FleetsSection() {
-  const t = useTranslations('fleets')
-  const fleets = [
-    { key: 'merchant', icon: '🚢' },
-    { key: 'tanker', icon: '🛢️' },
-    { key: 'offshore', icon: '⚓' },
-    { key: 'cruise', icon: '🛳️' },
-  ] as const
-  return (
-    <section className="py-20 px-4">
-      <div className="container mx-auto text-center">
-        <h2 className="text-3xl font-bold mb-12">{t('title')}</h2>
-        <div className="flex flex-wrap justify-center gap-6">
-          {fleets.map((f) => (
-            <div key={f.key} className="flex flex-col items-center gap-2 p-6 rounded-xl border bg-card w-36">
-              <span className="text-4xl">{f.icon}</span>
-              <span className="font-medium">{t(f.key)}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function PricingSection() {
-  const t = useTranslations('pricing')
-  const tiers = [
-    { key: 'free' as const, price: '$0', highlight: false },
-    { key: 'pro' as const, price: '$19/mo', highlight: true },
-    { key: 'enterprise' as const, price: '$49/mo', highlight: false },
-  ]
-  return (
-    <section className="py-20 px-4 bg-muted/30" id="pricing">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">{t('title')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {tiers.map((tier) => (
-            <Card key={tier.key} className={tier.highlight ? 'border-primary shadow-lg' : ''}>
-              <CardHeader>
-                {tier.highlight && <Badge className="w-fit mb-2">{t('popular')}</Badge>}
-                <CardTitle>{t(tier.key)}</CardTitle>
-                <p className="text-2xl font-bold">{tier.price}</p>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-4">
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {(t.raw(`tier.${tier.key}.features`) as string[]).map((f) => <li key={f}>✓ {f}</li>)}
-                </ul>
-                <Button variant={tier.highlight ? 'default' : 'outline'} disabled>
-                  {t('comingSoon')}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
+    </div>
   )
 }
 
@@ -146,12 +313,13 @@ export default function LandingPage({ params: { locale } }: { params: { locale: 
   return (
     <>
       <Header />
+      <Ticker />
       <main>
         <HeroSection locale={locale} />
+        <StatsBar />
+        <PhotoBand />
+        <VacanciesSection locale={locale} />
         <HowItWorksSection />
-        <FeaturesSection />
-        <FleetsSection />
-        <PricingSection />
       </main>
       <Footer />
     </>

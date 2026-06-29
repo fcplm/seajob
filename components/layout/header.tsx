@@ -3,7 +3,6 @@
 import { useTranslations, useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 
 export function Header() {
   const t = useTranslations('nav')
@@ -18,28 +17,51 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href={`/${locale}`} className="text-xl font-bold">
+    <header className="sticky top-0 z-50 bg-primary">
+      <div
+        style={{ maxWidth: 1080 }}
+        className="mx-auto px-12 h-14 flex items-center"
+      >
+        <Link
+          href={`/${locale}`}
+          className="font-display text-xl text-white tracking-tight flex-shrink-0"
+        >
           SeaJob
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          <Link href={`/${locale}#vacancies`} className="text-muted-foreground hover:text-foreground">
+
+        <nav className="hidden md:flex items-center ml-8">
+          <Link
+            href={`/${locale}#vacancies`}
+            className="text-white/50 hover:text-white/90 text-sm px-3.5 h-14 flex items-center transition-colors"
+          >
             {t('vacancies')}
           </Link>
-          <Link href={`/${locale}#pricing`} className="text-muted-foreground hover:text-foreground">
-            {t('pricing')}
+          <Link
+            href={`/${locale}/dashboard/resume`}
+            className="text-white/50 hover:text-white/90 text-sm px-3.5 h-14 flex items-center transition-colors"
+          >
+            {t('resume')}
+          </Link>
+          <Link
+            href={`/${locale}/dashboard/sender`}
+            className="text-white/50 hover:text-white/90 text-sm px-3.5 h-14 flex items-center transition-colors"
+          >
+            {t('cvSender')}
           </Link>
         </nav>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={toggleLocale}>
+
+        <div className="ml-auto flex items-center gap-4">
+          <button
+            onClick={toggleLocale}
+            className="text-white/35 hover:text-white/70 text-xs font-medium tracking-wide transition-colors"
+          >
             {locale === 'en' ? 'RU' : 'EN'}
-          </Button>
-          <Link href={`/${locale}/login`}>
-            <Button variant="ghost" size="sm">{t('login')}</Button>
-          </Link>
-          <Link href={`/${locale}/signup`}>
-            <Button size="sm">{t('getStarted')}</Button>
+          </button>
+          <Link
+            href={`/${locale}/login`}
+            className="text-white/80 hover:text-white text-sm font-medium border border-white/20 hover:border-white/40 px-4 py-1.5 rounded transition-colors"
+          >
+            {t('login')}
           </Link>
         </div>
       </div>
