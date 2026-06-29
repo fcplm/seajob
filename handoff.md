@@ -178,9 +178,37 @@ e2e/vacancies.spec.ts                      — Playwright tests (3 unauthenticat
 - `/en/dashboard/vacancies` — server component, reads `vacancies` table, supports fleet_type filter param
 - Apply button calls `applyToVacancy` server action → fetches user's resume → renders PDF → emails employer
 
-### Playwright config note
+### Pending manual steps before testing in browser
 
-Port 3000 was in use by a different process during testing, so `playwright.config.ts` was updated to use `PORT=3001`. This is the permanent correct config — dev server for SeaJob runs on 3001 when port 3000 is occupied.
+1. **Run vacancies SQL** in Supabase Dashboard:
+```sql
+create table vacancies (
+  id            uuid primary key default gen_random_uuid(),
+  external_id   text unique not null,
+  source        text not null,
+  rank          text,
+  company       text,
+  vessel_type   text,
+  salary        text,
+  description   text,
+  contact_email text,
+  url           text,
+  posted_at     timestamptz,
+  is_urgent     boolean not null default false,
+  created_at    timestamptz default now()
+);
+alter table vacancies enable row level security;
+create policy "Authenticated users read vacancies"
+  on vacancies for select
+  using (auth.role() = 'authenticated');
+```
+
+2. **Set real env vars** in `.env.local`:
+   - `RESEND_API_KEY` — from resend.com
+   - `SUPABASE_SERVICE_ROLE_KEY` — from Supabase project settings → API
+   - `CRON_SECRET` — any random string (also add to Vercel env)
+
+3. **Trigger first sync** manually: `POST /api/vacancies/sync` with `Authorization: Bearer <CRON_SECRET>`
 
 ## Next Session — CV Sender
 
