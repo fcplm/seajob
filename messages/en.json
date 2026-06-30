@@ -210,7 +210,13 @@
     "deselect": "Deselect",
     "select": "Select",
     "emailsSent": "Emails Sent",
-    "campaigns": "Campaigns"
+    "campaigns": "Campaigns",
+    "search": "Search...",
+    "added": "Employer added",
+    "error": "Something went wrong",
+    "imported": "Imported {count} employers",
+    "importFailed": "Import failed",
+    "colActive": "Active"
   },
   "resume": {
     "title": "My Resume",

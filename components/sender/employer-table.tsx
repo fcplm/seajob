@@ -44,8 +44,8 @@ export function EmployerTable({ employers }: Props) {
   function handleAdd(formData: FormData) {
     startTransition(async () => {
       const res = await addEmployer(formData)
-      if (res.ok) { toast.success('Added'); setDialogOpen(false) }
-      else toast.error(res.error ?? 'Error')
+      if (res.ok) { toast.success(t('added')); setDialogOpen(false) }
+      else toast.error(t('error'))
     })
   }
 
@@ -56,8 +56,8 @@ export function EmployerTable({ employers }: Props) {
     fd.append('file', file)
     startTransition(async () => {
       const res = await importEmployersCsv(fd)
-      if (res.ok) toast.success(`Imported ${res.imported} employers`)
-      else toast.error(res.error ?? 'Import failed')
+      if (res.ok) toast.success(t('imported', { count: res.imported }))
+      else toast.error(t('importFailed'))
     })
   }
 
@@ -70,7 +70,7 @@ export function EmployerTable({ employers }: Props) {
       <div className="flex flex-wrap gap-2 items-center justify-between">
         <div className="flex gap-2">
           <Input
-            placeholder="Search..."
+            placeholder={t('search')}
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="w-48"
@@ -113,7 +113,7 @@ export function EmployerTable({ employers }: Props) {
                   </SelectTrigger>
                   <SelectContent>
                     {FLEET_TYPES.map(f => (
-                      <SelectItem key={f} value={f}>{f}</SelectItem>
+                      <SelectItem key={f} value={f}>{t(`filter${f.charAt(0).toUpperCase() + f.slice(1)}` as 'filterMerchant')}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -135,7 +135,7 @@ export function EmployerTable({ employers }: Props) {
               <TableHead>{t('colCompany')}</TableHead>
               <TableHead>{t('colEmail')}</TableHead>
               <TableHead>{t('colFleet')}</TableHead>
-              <TableHead className="w-16">Active</TableHead>
+              <TableHead className="w-16">{t('colActive')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

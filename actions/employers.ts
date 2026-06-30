@@ -41,7 +41,7 @@ export async function addEmployer(
     .upsert({ company, email, fleet_type, is_active: true }, { onConflict: 'email' })
 
   if (error) return { ok: false, error: error.message }
-  revalidatePath('/dashboard/sender/employers')
+  revalidatePath('/[locale]/dashboard/sender/employers', 'page')
   return { ok: true }
 }
 
@@ -84,7 +84,7 @@ export async function importEmployersCsv(
     imported += batch.length
   }
 
-  revalidatePath('/dashboard/sender/employers')
+  revalidatePath('/[locale]/dashboard/sender/employers', 'page')
   return { ok: true, imported }
 }
 
@@ -104,6 +104,6 @@ export async function toggleEmployerActive(
     .eq('id', id)
 
   if (error) return { ok: false }
-  revalidatePath('/dashboard/sender/employers')
+  revalidatePath('/[locale]/dashboard/sender/employers', 'page')
   return { ok: true }
 }
