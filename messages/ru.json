@@ -11,6 +11,9 @@
   },
   "landing": {
     "tickerLabel": "Новые вакансии",
+    "heroHeadlineLine1": "Следующая",
+    "heroHeadlineLine2": "вахта",
+    "heroHeadlineEm": "уже ждёт.",
     "heroSub": "Создай резюме, найди вакансию, отправь CV напрямую работодателям. Без агентств и комиссий.",
     "browseVacancies": "Смотреть вакансии",
     "statsCompanies": "Судоходных компаний",
@@ -20,7 +23,18 @@
     "freshVacancies": "Свежие вакансии",
     "allVacancies": "Все вакансии",
     "photoBandHeadline": "Работа на море",
-    "photoBandSub": "без лишних шагов."
+    "photoBandSub": "без лишних шагов.",
+    "demoCardBadge": "Танкер",
+    "demoCardLabel1": "Контракт",
+    "demoCardValue1": "4 мес. + 2 отпуск",
+    "demoCardLabel2": "Флаг",
+    "demoCardLabel3": "Судно",
+    "demoCardLabel4": "Требования",
+    "demoCardSalaryUnit": "мес",
+    "demoCardSalarySubtitle": "до вычета налогов",
+    "demoCardApplications": "12 откликов",
+    "demoCardApply": "Откликнуться",
+    "demoCardPosted": "Опубликовано 2 дня назад"
   },
   "hero": {
     "headline": "Найди работу в море — быстро и просто",
@@ -74,10 +88,10 @@
   },
   "footer": {
     "tagline": "Платформа поиска работы для моряков.",
-    "links": "Ссылки",
+    "vacanciesLink": "Вакансии",
+    "howItWorksLink": "Как это работает",
     "contact": "Контакты",
     "rights": "Все права защищены.",
-    "featuresLink": "Возможности",
     "pricingLink": "Цены",
     "email": "contact@seajob.io"
   },
@@ -160,7 +174,6 @@
     "applied": "Резюме отправлено!",
     "applyError": "Ошибка отправки. Попробуй ещё раз.",
     "noResume": "Сначала создай резюме",
-    "noResumeLink": "Перейти к резюме",
     "urgent": "Срочно",
     "noVacancies": "Вакансий пока нет — синхронизация запускается раз в час."
   },

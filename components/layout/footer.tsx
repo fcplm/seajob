@@ -17,10 +17,10 @@ export function Footer() {
 
         <div className="flex items-center gap-6 ml-10">
           <Link href={`/${locale}#vacancies`} className="text-white/35 hover:text-white/65 text-sm transition-colors">
-            {t('featuresLink')}
+            {t('vacanciesLink')}
           </Link>
           <Link href={`/${locale}#how-it-works`} className="text-white/35 hover:text-white/65 text-sm transition-colors">
-            {t('links')}
+            {t('howItWorksLink')}
           </Link>
           <a href={`mailto:${t('email')}`} className="text-white/35 hover:text-white/65 text-sm transition-colors">
             {t('contact')}

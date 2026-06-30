@@ -11,7 +11,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 const TICKER_ITEMS = [
-  { rank: 'Капитан', co: 'Bulk Carrier, Pacific Maritime' },
+  { rank: 'Captain', co: 'Bulk Carrier, Pacific Maritime' },
   { rank: 'Chief Mate', co: 'Chemical Tanker, Stolt' },
   { rank: '2nd Engineer', co: 'AHTS, Bourbon Offshore' },
   { rank: 'ETO', co: 'Cruise, MSC' },
@@ -26,7 +26,7 @@ const VACANCIES = [
   { rank: 'Chief Engineer', co: 'Bourbon', type: 'Offshore', salary: '$10,500' },
   { rank: '2nd Officer', co: 'CMA CGM', type: 'Container', salary: '$4,800' },
   { rank: '3rd Engineer', co: 'Grimaldi', type: 'Ro-Ro', salary: '$4,200' },
-  { rank: 'Электромеханик', co: 'MSC', type: 'Cruise', salary: '$5,600' },
+  { rank: 'Electrician', co: 'MSC', type: 'Cruise', salary: '$5,600' },
   { rank: 'Bosun', co: 'Nordic Tankers', type: 'Tanker', salary: '$3,100' },
 ]
 
@@ -62,6 +62,13 @@ function HeroSection({ locale }: { locale: string }) {
   const t = useTranslations('hero')
   const tl = useTranslations('landing')
 
+  const demoCardRows = [
+    { label: tl('demoCardLabel1'), value: tl('demoCardValue1') },
+    { label: tl('demoCardLabel2'), value: 'Marshall Islands' },
+    { label: tl('demoCardLabel3'), value: '37,000 DWT Chemical tanker' },
+    { label: tl('demoCardLabel4'), value: 'STCW II/2, ECDIS, BRM' },
+  ]
+
   return (
     <div
       className="mx-auto px-12 py-16 grid gap-16 items-center"
@@ -72,11 +79,9 @@ function HeroSection({ locale }: { locale: string }) {
           className="font-display text-[52px] leading-[1.02] tracking-[-1.5px] mb-4"
           style={{ color: '#0c2461' }}
         >
-          {locale === 'ru' ? (
-            <>Следующая<br />вахта<br /><em style={{ color: '#1d4ed8' }}>уже ждёт.</em></>
-          ) : (
-            <>Your next<br />voyage<br /><em style={{ color: '#1d4ed8' }}>starts here.</em></>
-          )}
+          {tl('heroHeadlineLine1')}<br />
+          {tl('heroHeadlineLine2')}<br />
+          <em style={{ color: '#1d4ed8' }}>{tl('heroHeadlineEm')}</em>
         </h1>
         <p className="text-[15px] leading-relaxed mb-7 max-w-[360px]" style={{ color: '#64748b' }}>
           {tl('heroSub')}
@@ -115,17 +120,12 @@ function HeroSection({ locale }: { locale: string }) {
             className="text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded"
             style={{ color: '#1d4ed8', background: '#dce6f4', letterSpacing: '0.8px' }}
           >
-            Танкер
+            {tl('demoCardBadge')}
           </span>
         </div>
 
         <div className="flex flex-col gap-2 mb-4">
-          {[
-            { label: 'Контракт', value: '4 мес. + 2 отпуск' },
-            { label: 'Флаг', value: 'Marshall Islands' },
-            { label: 'Судно', value: '37,000 DWT Chemical tanker' },
-            { label: 'Требования', value: 'STCW II/2, ECDIS, BRM' },
-          ].map(({ label, value }) => (
+          {demoCardRows.map(({ label, value }) => (
             <div key={label} className="flex items-start gap-2.5 text-[12.5px]">
               <span className="text-[11px] font-medium w-[68px] shrink-0 pt-px" style={{ color: '#b0bcd4' }}>{label}</span>
               <span style={{ color: '#334155' }}>{value}</span>
@@ -137,19 +137,19 @@ function HeroSection({ locale }: { locale: string }) {
 
         <div className="flex justify-between items-end">
           <div>
-            <div className="text-[22px] font-extrabold tracking-tight" style={{ color: '#0c2461' }}>$8,500 / мес</div>
-            <div className="text-[10px] mt-0.5" style={{ color: '#94a3b8' }}>до вычета налогов</div>
+            <div className="text-[22px] font-extrabold tracking-tight" style={{ color: '#0c2461' }}>$8,500 / {tl('demoCardSalaryUnit')}</div>
+            <div className="text-[10px] mt-0.5" style={{ color: '#94a3b8' }}>{tl('demoCardSalarySubtitle')}</div>
           </div>
-          <span className="text-[11px]" style={{ color: '#94a3b8' }}>12 откликов</span>
+          <span className="text-[11px]" style={{ color: '#94a3b8' }}>{tl('demoCardApplications')}</span>
         </div>
 
         <button
           className="w-full mt-4 bg-primary text-white text-[13px] font-semibold py-2.5 rounded-lg transition-opacity hover:opacity-90 active:translate-y-px"
         >
-          Откликнуться
+          {tl('demoCardApply')}
         </button>
         <div className="text-center text-[10.5px] mt-2.5" style={{ color: '#c7d5e8' }}>
-          Опубликовано 2 дня назад
+          {tl('demoCardPosted')}
         </div>
       </div>
     </div>

@@ -91,7 +91,7 @@ export async function applyToVacancy(
   const subject = `Application — ${rank}, ${fullName}`
 
   const { error: sendError } = await resend.emails.send({
-    from: 'noreply@resend.dev',
+    from: process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev',
     to: vacancy.contact_email,
     subject,
     text: 'Please find attached my resume. Sent via SeaJob.',

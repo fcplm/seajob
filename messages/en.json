@@ -11,6 +11,9 @@
   },
   "landing": {
     "tickerLabel": "New vacancies",
+    "heroHeadlineLine1": "Your next",
+    "heroHeadlineLine2": "voyage",
+    "heroHeadlineEm": "starts here.",
     "heroSub": "Build your seafarer profile, find your next position, send your CV directly to employers. No agents, no fees.",
     "browseVacancies": "Browse vacancies",
     "statsCompanies": "Shipping companies",
@@ -20,7 +23,18 @@
     "freshVacancies": "Fresh vacancies",
     "allVacancies": "All vacancies",
     "photoBandHeadline": "Work at sea",
-    "photoBandSub": "without the hassle."
+    "photoBandSub": "without the hassle.",
+    "demoCardBadge": "Tanker",
+    "demoCardLabel1": "Contract",
+    "demoCardValue1": "4 mo. + 2 vacation",
+    "demoCardLabel2": "Flag",
+    "demoCardLabel3": "Vessel",
+    "demoCardLabel4": "Requirements",
+    "demoCardSalaryUnit": "mo",
+    "demoCardSalarySubtitle": "before tax",
+    "demoCardApplications": "12 applications",
+    "demoCardApply": "Apply",
+    "demoCardPosted": "Posted 2 days ago"
   },
   "hero": {
     "headline": "Find Your Next Maritime Job — Fast",
@@ -74,10 +88,10 @@
   },
   "footer": {
     "tagline": "The job platform built for seafarers.",
-    "links": "Links",
+    "vacanciesLink": "Vacancies",
+    "howItWorksLink": "How it works",
     "contact": "Contact",
     "rights": "All rights reserved.",
-    "featuresLink": "Features",
     "pricingLink": "Pricing",
     "email": "contact@seajob.io"
   },
@@ -160,7 +174,6 @@
     "applied": "Resume sent!",
     "applyError": "Failed to send. Try again.",
     "noResume": "Create your resume first",
-    "noResumeLink": "Go to Resume",
     "urgent": "Urgent",
     "noVacancies": "No vacancies yet — sync will run hourly."
   },

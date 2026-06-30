@@ -46,3 +46,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ synced: vacancies.length })
 }
+
+export async function GET(req: Request) {
+  return POST(req as NextRequest)
+}
