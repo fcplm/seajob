@@ -30,6 +30,14 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
 
   const hasResume = !!resumeRow
 
+  const { data: analyticsData } = await supabase
+    .from('send_campaigns')
+    .select('sent_count, status')
+    .eq('user_id', user.id)
+
+  const emailsSent = (analyticsData ?? []).reduce((sum, c) => sum + (c.sent_count ?? 0), 0)
+  const campaignsDone = (analyticsData ?? []).filter(c => c.status === 'done').length
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <ProfileCard profile={profile} />
@@ -37,7 +45,7 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
         <SubscriptionWidget status={profile.subscription_status} />
         <ResumeWidget hasResume={hasResume} />
         <ActivityWidget />
-        <AnalyticsWidget />
+        <AnalyticsWidget emailsSent={emailsSent} campaigns={campaignsDone} />
       </div>
     </div>
   )
