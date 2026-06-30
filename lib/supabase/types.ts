@@ -109,6 +109,39 @@ export type Vacancy = {
   created_at: string
 }
 
+export type Employer = {
+  id: string
+  company: string | null
+  email: string
+  fleet_type: string
+  is_active: boolean
+  created_at: string
+}
+
+export type SendCampaign = {
+  id: string
+  user_id: string
+  fleet_type: string
+  cover_letter: string | null
+  resume_pdf_b64: string | null
+  status: 'pending' | 'running' | 'done' | 'failed'
+  total_count: number
+  sent_count: number
+  failed_count: number
+  created_at: string
+  completed_at: string | null
+}
+
+export type SendJob = {
+  id: string
+  campaign_id: string
+  employer_id: string
+  status: 'pending' | 'sent' | 'failed'
+  sent_at: string | null
+  error: string | null
+  created_at: string
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -164,6 +197,24 @@ export type Database = {
         Row: Vacancy
         Insert: Omit<Vacancy, 'id' | 'created_at'>
         Update: Partial<Omit<Vacancy, 'id' | 'created_at'>>
+        Relationships: []
+      }
+      employers: {
+        Row: Employer
+        Insert: Omit<Employer, 'id' | 'created_at'>
+        Update: Partial<Omit<Employer, 'id' | 'created_at'>>
+        Relationships: []
+      }
+      send_campaigns: {
+        Row: SendCampaign
+        Insert: Omit<SendCampaign, 'id' | 'created_at'>
+        Update: Partial<Omit<SendCampaign, 'id' | 'created_at'>>
+        Relationships: []
+      }
+      send_jobs: {
+        Row: SendJob
+        Insert: Omit<SendJob, 'id' | 'created_at'>
+        Update: Partial<Omit<SendJob, 'id' | 'created_at'>>
         Relationships: []
       }
     }
