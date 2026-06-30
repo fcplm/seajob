@@ -36,8 +36,8 @@ export function CampaignProgress({ campaign: initial }: Props) {
   return (
     <div className="rounded-xl border bg-card p-5 space-y-3" style={{ borderColor: '#b8cce0' }}>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold capitalize" style={{ color: '#0c2461' }}>
-          {campaign.fleet_type}
+        <p className="text-sm font-semibold" style={{ color: '#0c2461' }}>
+          {t(`filter${campaign.fleet_type.charAt(0).toUpperCase() + campaign.fleet_type.slice(1)}` as 'filterMerchant')}
         </p>
         <span className="text-xs text-muted-foreground capitalize">{campaign.status}</span>
       </div>
