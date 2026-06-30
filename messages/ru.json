@@ -219,7 +219,8 @@
     "error": "Что-то пошло не так",
     "imported": "Импортировано {count} работодателей",
     "importFailed": "Ошибка импорта",
-    "colActive": "Активен"
+    "colActive": "Активен",
+    "campaign_active": "Рассылка уже выполняется"
   },
   "resume": {
     "title": "Моё резюме",

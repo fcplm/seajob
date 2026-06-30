@@ -79,15 +79,33 @@ export async function POST(req: NextRequest) {
     ? Buffer.from(campaign.resume_pdf_b64, 'base64')
     : null
 
+  // Atomically claim the batch to prevent duplicate sends on concurrent cron invocations.
+  // We optimistically mark all fetched jobs as 'sent' filtered to still-pending rows.
+  // A concurrent invocation will find 0 rows matching .eq('status', 'pending') and exit early.
+  // Jobs that fail to send are flipped back to 'failed' in the loop below.
+  // Note: full elimination of the race requires DB-side FOR UPDATE SKIP LOCKED; this is MVP mitigation.
+  const jobIds = jobs.map(j => j.id)
+  const { data: claimedJobs } = await supabase
+    .from('send_jobs')
+    .update({ status: 'sent' as const, sent_at: new Date().toISOString() })
+    .in('id', jobIds)
+    .eq('status', 'pending')
+    .select('id, employer_id')
+
+  const jobsToProcess = claimedJobs ?? []
+  if (jobsToProcess.length === 0) {
+    return NextResponse.json({ processed: 0 })
+  }
+
   let sentCount = 0
   let failedCount = 0
 
-  for (const job of jobs) {
+  for (const job of jobsToProcess) {
     const toEmail = emailByEmployerId[job.employer_id]
     if (!toEmail || !pdfBuffer) {
       await supabase
         .from('send_jobs')
-        .update({ status: 'failed', error: 'missing_email_or_pdf' })
+        .update({ status: 'failed', error: 'missing_email_or_pdf', sent_at: null })
         .eq('id', job.id)
       failedCount++
       continue
@@ -107,15 +125,17 @@ export async function POST(req: NextRequest) {
     })
 
     if (error) {
+      // Flip claimed job back to failed; clear the optimistic sent_at
       await supabase
         .from('send_jobs')
-        .update({ status: 'failed', error: error.message })
+        .update({ status: 'failed', error: error.message, sent_at: null })
         .eq('id', job.id)
       failedCount++
     } else {
+      // Already claimed as 'sent'; refresh sent_at to actual delivery time
       await supabase
         .from('send_jobs')
-        .update({ status: 'sent', sent_at: new Date().toISOString() })
+        .update({ sent_at: new Date().toISOString() })
         .eq('id', job.id)
       sentCount++
     }
@@ -130,5 +150,5 @@ export async function POST(req: NextRequest) {
     })
     .eq('id', campaign.id)
 
-  return NextResponse.json({ processed: jobs.length, sent: sentCount, failed: failedCount })
+  return NextResponse.json({ processed: jobsToProcess.length, sent: sentCount, failed: failedCount })
 }

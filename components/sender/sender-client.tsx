@@ -50,6 +50,8 @@ export function SenderClient({ employers, activeCampaign }: Props) {
           (new Date(res.availableAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
         )
         toast.error(t('cooldown', { days }))
+      } else if (res.error === 'campaign_active') {
+        toast.error(t('campaign_active'))
       } else {
         toast.error(t('error'))
       }

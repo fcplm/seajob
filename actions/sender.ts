@@ -77,6 +77,18 @@ export async function launchCampaign(
     return { ok: false, error: 'cooldown', availableAt }
   }
 
+  // Block launch if any campaign is already active (any fleet type)
+  const { data: active } = await supabase
+    .from('send_campaigns')
+    .select('id')
+    .eq('user_id', user.id)
+    .in('status', ['pending', 'running'])
+    .limit(1)
+
+  if (active && active.length > 0) {
+    return { ok: false, error: 'campaign_active' }
+  }
+
   // Check resume exists
   const { data: resume } = await supabase
     .from('resumes')

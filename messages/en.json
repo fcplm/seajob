@@ -219,7 +219,8 @@
     "error": "Something went wrong",
     "imported": "Imported {count} employers",
     "importFailed": "Import failed",
-    "colActive": "Active"
+    "colActive": "Active",
+    "campaign_active": "A campaign is already running"
   },
   "resume": {
     "title": "My Resume",
