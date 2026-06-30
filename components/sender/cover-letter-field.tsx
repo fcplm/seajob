@@ -22,9 +22,9 @@ export function CoverLetterField({ value, onChange }: Props) {
       const res = await translateCoverLetter(value)
       if (res.ok && res.text) {
         onChange(res.text)
-        toast.success('Translated!')
+        toast.success(t('translateSuccess'))
       } else {
-        toast.error('Translation failed')
+        toast.error(t('translateError'))
       }
     })
   }
@@ -38,7 +38,7 @@ export function CoverLetterField({ value, onChange }: Props) {
         value={value}
         onChange={e => onChange(e.target.value)}
         rows={6}
-        placeholder="Dear Sir/Madam, ..."
+        placeholder={t('coverLetterPlaceholder')}
         className="resize-none"
       />
       <Button

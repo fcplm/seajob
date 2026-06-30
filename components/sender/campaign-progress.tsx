@@ -19,8 +19,8 @@ export function CampaignProgress({ campaign }: Props) {
       className="rounded-xl border bg-card p-4 space-y-2"
       style={{ borderColor: '#b8cce0' }}
     >
-      <p className="text-sm font-medium capitalize" style={{ color: '#0c2461' }}>
-        {campaign.fleet_type}
+      <p className="text-sm font-medium" style={{ color: '#0c2461' }}>
+        {t(`filter${campaign.fleet_type.charAt(0).toUpperCase() + campaign.fleet_type.slice(1)}` as 'filterMerchant')}
       </p>
       <p className="text-sm text-muted-foreground">
         {t('progress', { sent: campaign.sent_count, total: campaign.total_count })}

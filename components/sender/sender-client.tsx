@@ -51,7 +51,7 @@ export function SenderClient({ employers, activeCampaign }: Props) {
         )
         toast.error(t('cooldown', { days }))
       } else {
-        toast.error(res.error ?? 'Error')
+        toast.error(t('error'))
       }
     })
   }
