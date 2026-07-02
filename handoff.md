@@ -350,13 +350,35 @@ e2e/auth.spec.ts navigation.spec.ts resume.spec.ts
 
 ---
 
+## Session 6 Fixes (2026-07-02)
+
+| Fix | Commit |
+|-----|--------|
+| Ticker animation — added `@keyframes ticker` CSS + wired up in landing page | `2c5197a` |
+| ProfileCard — async server component, translates fleet_type via `getTranslations` | `2c5197a` |
+| ActivityWidget — real props showing last campaign fleet/status/count | `2c5197a` |
+| Profile form — `bulk` SelectItem added; `bulk`/`downloadingPdf` i18n keys added | `2c5197a` |
+| Dashboard analytics query — now fetches `fleet_type`+`created_at`, passes lastCampaign | `2c5197a` |
+| Resume editor — programmatic PDF fetch + error toast via sonner | `2c5197a` |
+| Profile type — `bulk` added to `Profile.fleet_type` union in `lib/supabase/types.ts` | `aad051d` |
+
+### Still needs Supabase SQL (profiles constraint)
+
+The profiles table check constraint was created without 'bulk'. Run in Supabase Dashboard:
+
+```sql
+ALTER TABLE profiles DROP CONSTRAINT profiles_fleet_type_check;
+ALTER TABLE profiles ADD CONSTRAINT profiles_fleet_type_check
+  CHECK (fleet_type IN ('merchant','tanker','offshore','bulk','cruise'));
+```
+
+---
+
 ## Known Deferred Items
 
 | Item | Severity | Notes |
 |------|----------|-------|
-| Profile card shows raw DB fleet_type value | Minor | Needs client translation |
 | `nav.about` key exists but no About page | Minor | Dead i18n key |
-| Analytics widget shows 0/0 | By design | CV Sender phase will fix |
 | Stripe payments are placeholder UI | By design | Future phase |
-| PDF download error not shown as toast | Minor | pdfError i18n key exists but unused |
 | Form validation client-side only | Minor | Server actions already guard ownership |
+| Profiles DB constraint doesn't include 'bulk' | Medium | Run SQL above before bulk can be saved |
