@@ -49,7 +49,7 @@ export async function updateProfile(formData: FormData) {
     .update({
       full_name: formData.get('full_name') as string,
       rank: formData.get('rank') as string,
-      fleet_type: (formData.get('fleet_type') as string || null) as 'merchant' | 'tanker' | 'offshore' | 'cruise' | null,
+      fleet_type: (formData.get('fleet_type') as string || null) as 'merchant' | 'tanker' | 'offshore' | 'bulk' | 'cruise' | null,
       phone: formData.get('phone') as string,
     })
     .eq('id', user.id)

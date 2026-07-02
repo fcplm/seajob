@@ -2,7 +2,7 @@ export type Profile = {
   id: string
   full_name: string | null
   rank: string | null
-  fleet_type: 'merchant' | 'tanker' | 'offshore' | 'cruise' | null
+  fleet_type: 'merchant' | 'tanker' | 'offshore' | 'bulk' | 'cruise' | null
   phone: string | null
   photo_url: string | null
   subscription_status: 'free' | 'pro' | 'enterprise'
