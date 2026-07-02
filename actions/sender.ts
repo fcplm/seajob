@@ -194,7 +194,7 @@ export async function getActiveCampaign(): Promise<SendCampaign | null> {
 
   const { data } = await supabase
     .from('send_campaigns')
-    .select('*')
+    .select('id, user_id, fleet_type, cover_letter, status, total_count, sent_count, failed_count, created_at, completed_at')
     .eq('user_id', user.id)
     .in('status', ['pending', 'running'])
     .order('created_at', { ascending: false })

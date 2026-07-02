@@ -38,7 +38,7 @@ Four sub-systems planned:
 | **Foundation** | ✅ Complete | Auth, dashboard, profile, i18n, E2E |
 | **Resume Builder** | ✅ Complete | All tasks done, 8/8 E2E tests passing |
 | **Vacancies Board** | ✅ Complete | All tasks done, 11/13 E2E tests passing (2 skipped — need credentials) |
-| **CV Sender** | Not started | |
+| **CV Sender** | ⚠️ Implemented, white screen bug active | See below |
 
 ---
 
@@ -210,7 +210,122 @@ create policy "Authenticated users read vacancies"
 
 3. **Trigger first sync** manually: `POST /api/vacancies/sync` with `Authorization: Bearer <CRON_SECRET>`
 
-## Next Session — CV Sender
+## CV Sender — What Was Built (Session 5)
+
+### Key commits (oldest → newest)
+
+| Hash | Description |
+|------|-------------|
+| `715f8b2` | DB types, i18n, deps, import script (2113 employers), cron config |
+| `4e97cc5` | Employer management — admin table, CSV import, add form |
+| `43c6b8b` | Employer table i18n + revalidatePath fix |
+| `7f9cfa4` | Sender page — fleet filter, cover letter, AI translate, launch action |
+| `1a4c9c9` | Sender i18n — toasts, placeholder, fleet label |
+| `524084b` | Queue processor — cron route, batch email send |
+| `7ac29e0` | Progress polling, real analytics widget, E2E tests |
+| `53302e2` | Fix: campaign-progress fleet_type i18n |
+| `45b82c9` | Fix: race condition + active-campaign guard |
+
+### Key new files
+
+```
+actions/sender.ts                              — translateCoverLetter, launchCampaign, getActiveCampaign
+actions/employers.ts                           — addEmployer, importEmployersCsv, toggleEmployerActive
+components/sender/
+  sender-client.tsx                            — fleet filter + cover letter + recipient list + launch
+  sender-page-content.tsx                      — client wrapper for full page (ssr:false)
+  fleet-filter.tsx                             — 5 fleet type buttons
+  cover-letter-field.tsx                       — textarea + AI translate button
+  recipient-list.tsx                           — expandable employer list with checkboxes
+  campaign-progress.tsx                        — progress bar with 10s polling
+  employer-table.tsx                           — admin CRUD table
+app/[locale]/dashboard/sender/page.tsx        — server component (data fetch + ssr:false wrapper)
+app/[locale]/dashboard/sender/employers/page.tsx — admin-only employer management
+app/api/sender/process/route.ts               — cron: batch email send (GET + POST)
+app/global-error.tsx                          — global error boundary
+e2e/sender.spec.ts                            — unauthenticated redirect tests
+next.config.mjs                               — added @anthropic-ai/sdk + @react-pdf/renderer to serverComponentsExternalPackages
+```
+
+### How it works
+
+- Admin imports employers via CSV → stored in `employers` table (2113 contacts, segmented by fleet_type)
+- User selects fleet type → writes cover letter → optionally AI-translates it → launches campaign
+- `launchCampaign` server action: cooldown check → create `send_campaigns` row + `send_jobs` rows → cron picks up
+- Cron at `/api/sender/process`: claims up to 50 pending jobs atomically → renders PDF → sends via Resend → updates status
+- `CampaignProgress` polls `getActiveCampaign()` every 10s while campaign is running
+
+### Env vars required (see `.env.local`)
+
+```
+ANTHROPIC_API_KEY=...     — for AI cover letter translation
+RESEND_API_KEY=...        — for email delivery
+RESEND_FROM_EMAIL=...     — sender address (configured domain)
+SUPABASE_SERVICE_ROLE_KEY=...  — for bulk job inserts (bypasses RLS)
+CRON_SECRET=...           — Bearer token for /api/sender/process
+ADMIN_EMAIL=...           — grants access to /dashboard/sender/employers
+```
+
+### Supabase SQL (must be run if not already)
+
+```sql
+create table employers (
+  id uuid primary key default gen_random_uuid(),
+  company text,
+  email text not null,
+  fleet_type text not null check (fleet_type in ('merchant','tanker','offshore','bulk','cruise')),
+  is_active boolean not null default true,
+  created_at timestamptz default now()
+);
+alter table employers enable row level security;
+create policy "Auth users read employers" on employers for select using (auth.role() = 'authenticated');
+create policy "Service role manages employers" on employers for all using (true);
+
+create table send_campaigns (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users not null,
+  fleet_type text not null,
+  cover_letter text,
+  resume_pdf_b64 text,
+  status text not null default 'pending' check (status in ('pending','running','done','failed')),
+  total_count int not null default 0,
+  sent_count int not null default 0,
+  failed_count int not null default 0,
+  completed_at timestamptz,
+  created_at timestamptz default now()
+);
+alter table send_campaigns enable row level security;
+create policy "Users manage own campaigns" on send_campaigns for all using (auth.uid() = user_id);
+
+create table send_jobs (
+  id uuid primary key default gen_random_uuid(),
+  campaign_id uuid references send_campaigns not null,
+  employer_id uuid references employers not null,
+  status text not null default 'pending' check (status in ('pending','sent','failed')),
+  sent_at timestamptz,
+  error text,
+  created_at timestamptz default now()
+);
+alter table send_jobs enable row level security;
+create policy "Users manage own jobs" on send_jobs for all using (
+  exists (select 1 from send_campaigns where id = campaign_id and user_id = auth.uid())
+);
+```
+
+### ✅ Bug Fixed — White Screen Was Stale Build Cache
+
+**Root cause:** Running `npm run build` while the dev server was live left the `.next` cache in an inconsistent state. The vendor chunk `next-intl.js` was absent from the dev server's module map, causing 500 errors on all pages.
+
+**Fix:** Cleared `.next` directory + restarted dev server. No code changes needed.
+
+**What changed during debugging (kept — all are improvements):**
+- `@anthropic-ai/sdk` added to `serverComponentsExternalPackages` — prevents webpack from bundling it
+- `getActiveCampaign()` uses explicit column list (no `resume_pdf_b64`) — smaller RSC payload
+- `SenderPageContent` wrapped in `dynamic({ ssr: false })` — eliminates hydration risk on this data-heavy page
+- `app/global-error.tsx` added — global React error boundary
+- `app/[locale]/layout.tsx` has `translate="no"` — prevents browser translation DOM mutation
+
+**To start dev server:** `npm run dev` (from repo root). After any `npm run build`, always do `rm -rf .next` + `npm run dev` to avoid stale cache.
 
 ---
 

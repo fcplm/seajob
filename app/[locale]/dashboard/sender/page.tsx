@@ -1,11 +1,26 @@
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
+import dynamic from 'next/dynamic'
 import { createClient } from '@/lib/supabase/server'
 import { isAdmin } from '@/lib/admin'
 import { getActiveCampaign } from '@/actions/sender'
-import { SenderClient } from '@/components/sender/sender-client'
 import type { Employer } from '@/lib/supabase/types'
-import Link from 'next/link'
+
+const SenderPageContent = dynamic(
+  () => import('@/components/sender/sender-page-content').then(m => ({ default: m.SenderPageContent })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="p-6 max-w-2xl mx-auto">
+        <div className="h-8 w-48 bg-muted rounded animate-pulse mb-6" />
+        <div className="space-y-4">
+          <div className="h-10 bg-muted rounded animate-pulse" />
+          <div className="h-32 bg-muted rounded animate-pulse" />
+          <div className="h-10 bg-muted rounded animate-pulse" />
+        </div>
+      </div>
+    ),
+  }
+)
 
 export default async function SenderPage({
   params: { locale },
@@ -18,65 +33,26 @@ export default async function SenderPage({
   } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const t = await getTranslations('sender')
-
-  // Check if user has a resume
-  const { data: resume } = await supabase
-    .from('resumes')
-    .select('id')
-    .eq('user_id', user.id)
-    .single()
-
-  const activeCampaign = await getActiveCampaign()
-
-  // Fetch all active employers (filtered client-side by fleet type)
-  const { data: employers } = await supabase
-    .from('employers')
-    .select('*')
-    .eq('is_active', true)
-    .order('fleet_type')
-    .returns<Employer[]>()
+  const [{ data: resume }, activeCampaign, { data: employers }] = await Promise.all([
+    supabase.from('resumes').select('id').eq('user_id', user.id).single(),
+    getActiveCampaign(),
+    supabase
+      .from('employers')
+      .select('id, email, company, fleet_type, is_active')
+      .eq('is_active', true)
+      .order('fleet_type')
+      .returns<Employer[]>(),
+  ])
 
   const admin = isAdmin(user.email)
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl" style={{ color: '#0c2461' }}>
-          {t('title')}
-        </h1>
-        {admin && (
-          <Link
-            href={`/${locale}/dashboard/sender/employers`}
-            className="text-sm underline"
-            style={{ color: '#0c2461' }}
-          >
-            {t('managersTitle')}
-          </Link>
-        )}
-      </div>
-
-      {!resume ? (
-        <div
-          className="rounded-xl border bg-card p-6 text-center space-y-2"
-          style={{ borderColor: '#b8cce0' }}
-        >
-          <p className="text-muted-foreground">{t('noResume')}</p>
-          <Link
-            href={`/${locale}/dashboard/resume`}
-            className="text-sm underline"
-            style={{ color: '#0c2461' }}
-          >
-            {t('noResumeLink')}
-          </Link>
-        </div>
-      ) : (
-        <SenderClient
-          employers={employers ?? []}
-          activeCampaign={activeCampaign}
-          locale={locale}
-        />
-      )}
-    </div>
+    <SenderPageContent
+      employers={employers ?? []}
+      activeCampaign={activeCampaign}
+      locale={locale}
+      admin={admin}
+      hasResume={!!resume}
+    />
   )
 }

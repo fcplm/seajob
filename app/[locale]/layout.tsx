@@ -33,7 +33,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} translate="no">
       <body className={`${dmSerifDisplay.variable} ${dmSans.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
           {children}
