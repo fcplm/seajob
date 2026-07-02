@@ -40,19 +40,21 @@ function Ticker() {
       style={{ background: '#c8d8ee', borderColor: '#a8bcd8' }}
     >
       <div
-        className="flex-shrink-0 text-[10px] font-bold tracking-[2px] uppercase px-12 pr-6 border-r mr-6"
-        style={{ color: '#94a3b8', borderColor: '#9ab0cc', whiteSpace: 'nowrap' }}
+        className="flex-shrink-0 text-[10px] font-bold tracking-[2px] uppercase px-6 border-r mr-4 z-10"
+        style={{ color: '#94a3b8', borderColor: '#9ab0cc', whiteSpace: 'nowrap', background: '#c8d8ee' }}
       >
         {t('tickerLabel')}
       </div>
-      <div className="flex gap-7 items-center overflow-hidden" style={{ whiteSpace: 'nowrap' }}>
-        {items.map((item, i) => (
-          <div key={i} className="flex items-center gap-1.5 text-xs flex-shrink-0">
-            <span className="font-bold" style={{ color: '#0c2461' }}>{item.rank}</span>
-            <span style={{ color: '#b8cce8' }}>/</span>
-            <span style={{ color: '#64748b' }}>{item.co}</span>
-          </div>
-        ))}
+      <div className="overflow-hidden flex-1">
+        <div className="animate-ticker" style={{ whiteSpace: 'nowrap' }}>
+          {items.map((item, i) => (
+            <div key={i} className="inline-flex items-center gap-1.5 text-xs flex-shrink-0">
+              <span className="font-bold" style={{ color: '#0c2461' }}>{item.rank}</span>
+              <span style={{ color: '#b8cce8' }}>/</span>
+              <span style={{ color: '#64748b' }}>{item.co}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

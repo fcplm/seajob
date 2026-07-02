@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -48,9 +49,28 @@ export function ResumeEditor({ data, subscriptionStatus }: Props) {
   const t = useTranslations('resume')
   const [completed, setCompleted] = useState<Record<SectionKey, boolean>>(initCompleted(data))
   const [selectedTemplate, setSelectedTemplate] = useState<Template>(data.resume?.template ?? 'classic')
+  const [isDownloading, startDownload] = useTransition()
 
   function onComplete(key: SectionKey) {
     return (complete: boolean) => setCompleted(prev => ({ ...prev, [key]: complete }))
+  }
+
+  function handleDownload() {
+    startDownload(async () => {
+      try {
+        const res = await fetch(`/api/resume/pdf?template=${selectedTemplate}`)
+        if (!res.ok) { toast.error(t('pdfError')); return }
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'resume.pdf'
+        a.click()
+        URL.revokeObjectURL(url)
+      } catch {
+        toast.error(t('pdfError'))
+      }
+    })
   }
 
   const score = SECTION_KEYS.filter(k => completed[k]).length / SECTION_KEYS.length
@@ -60,13 +80,13 @@ export function ResumeEditor({ data, subscriptionStatus }: Props) {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-4">
         <CompletenessBar score={score} />
-        {hasResume ? (
-          <a href={`/api/resume/pdf?template=${selectedTemplate}`} download>
-            <Button size="sm">{t('downloadPdf')}</Button>
-          </a>
-        ) : (
-          <Button disabled size="sm">{t('downloadPdf')}</Button>
-        )}
+        <Button
+          size="sm"
+          onClick={handleDownload}
+          disabled={!hasResume || isDownloading}
+        >
+          {isDownloading ? t('downloadingPdf') : t('downloadPdf')}
+        </Button>
       </div>
 
       <TemplatePicker

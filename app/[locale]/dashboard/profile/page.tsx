@@ -58,6 +58,7 @@ export default function ProfilePage() {
               <SelectItem value="merchant">{t('merchant')}</SelectItem>
               <SelectItem value="tanker">{t('tanker')}</SelectItem>
               <SelectItem value="offshore">{t('offshore')}</SelectItem>
+              <SelectItem value="bulk">{t('bulk')}</SelectItem>
               <SelectItem value="cruise">{t('cruise')}</SelectItem>
             </SelectContent>
           </Select>

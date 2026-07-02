@@ -152,6 +152,7 @@
     "merchant": "Торговый",
     "tanker": "Танкерный",
     "offshore": "Оффшор",
+    "bulk": "Балкерный",
     "cruise": "Круизный"
   },
   "settings": {
@@ -226,6 +227,7 @@
     "title": "Моё резюме",
     "completeness": "{percent}% заполнено",
     "downloadPdf": "Скачать PDF",
+    "downloadingPdf": "Скачиваю...",
     "badgePro": "Pro",
     "templateClassic": "Классик",
     "templateModern": "Современный",

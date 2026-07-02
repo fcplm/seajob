@@ -32,11 +32,13 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
 
   const { data: analyticsData } = await supabase
     .from('send_campaigns')
-    .select('sent_count, status')
+    .select('sent_count, status, fleet_type, created_at')
     .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
 
   const emailsSent = (analyticsData ?? []).reduce((sum, c) => sum + (c.sent_count ?? 0), 0)
   const campaignsDone = (analyticsData ?? []).filter(c => c.status === 'done').length
+  const lastCampaign = analyticsData?.[0] ?? null
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -44,7 +46,11 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SubscriptionWidget status={profile.subscription_status} />
         <ResumeWidget hasResume={hasResume} />
-        <ActivityWidget />
+        <ActivityWidget
+          lastCampaignFleet={lastCampaign?.fleet_type}
+          lastCampaignStatus={lastCampaign?.status}
+          lastCampaignSent={lastCampaign?.sent_count}
+        />
         <AnalyticsWidget emailsSent={emailsSent} campaigns={campaignsDone} />
       </div>
     </div>

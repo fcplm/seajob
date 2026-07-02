@@ -152,6 +152,7 @@
     "merchant": "Merchant",
     "tanker": "Tanker",
     "offshore": "Offshore",
+    "bulk": "Bulk",
     "cruise": "Cruise"
   },
   "settings": {
@@ -226,6 +227,7 @@
     "title": "My Resume",
     "completeness": "{percent}% complete",
     "downloadPdf": "Download PDF",
+    "downloadingPdf": "Downloading...",
     "badgePro": "Pro",
     "templateClassic": "Classic",
     "templateModern": "Modern",
