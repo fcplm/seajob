@@ -33,9 +33,9 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} translate="no">
-      <body className={`${dmSerifDisplay.variable} ${dmSans.variable} antialiased`}>
-        <NextIntlClientProvider messages={messages}>
+    <html lang={locale} translate="no" className="notranslate">
+      <body className={`${dmSerifDisplay.variable} ${dmSans.variable} antialiased`} suppressHydrationWarning>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
           <Toaster position="top-right" />
         </NextIntlClientProvider>

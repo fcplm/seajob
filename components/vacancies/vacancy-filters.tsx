@@ -1,5 +1,7 @@
+'use client'
+
 import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 const FILTERS = [
   { key: '', labelKey: 'filterAll' },
@@ -12,14 +14,14 @@ const FILTERS = [
 
 type LabelKey = (typeof FILTERS)[number]['labelKey']
 
-export async function VacancyFilters({
+export function VacancyFilters({
   currentFleet,
   locale,
 }: {
   currentFleet: string
   locale: string
 }) {
-  const t = await getTranslations('vacancies')
+  const t = useTranslations('vacancies')
 
   return (
     <div className="flex flex-wrap gap-2">

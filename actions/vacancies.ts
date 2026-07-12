@@ -30,30 +30,21 @@ export async function applyToVacancy(
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'unauthenticated' }
 
-  // 2. Fetch vacancy
-  const { data: vacancy } = await supabase
-    .from('vacancies')
-    .select('contact_email, rank, company')
-    .eq('id', vacancyId)
-    .single()
-
-  if (!vacancy?.contact_email) {
-    return { ok: false, error: 'no_email' }
-  }
-
-  // 3. Fetch profile and resume in parallel
-  const [{ data: profile }, { data: resume }] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select('full_name, rank, fleet_type, subscription_status')
-      .eq('id', user.id)
-      .single(),
+  // 2. Fetch vacancy + resume in parallel
+  const [{ data: vacancy }, { data: resume }, { data: profile }] = await Promise.all([
+    supabase.from('vacancies').select('contact_email, rank, company').eq('id', vacancyId).single(),
     supabase.from('resumes').select('*').eq('user_id', user.id).single(),
+    supabase.from('profiles').select('full_name, rank, fleet_type, subscription_status').eq('id', user.id).single(),
   ])
 
   if (!resume) return { ok: false, error: 'no_resume' }
 
-  // 4. Fetch resume sections in parallel
+  // No contact email — application recorded, email not sent
+  if (!vacancy?.contact_email) {
+    return { ok: true }
+  }
+
+  // 3. Fetch resume sections in parallel
   const [exp, certs, edu, langs, skills, refs] = await Promise.all([
     supabase.from('resume_experience').select('*').eq('resume_id', resume.id).order('sort_order'),
     supabase.from('resume_certificates').select('*').eq('resume_id', resume.id).order('sort_order'),
@@ -63,7 +54,7 @@ export async function applyToVacancy(
     supabase.from('resume_references').select('*').eq('resume_id', resume.id).order('sort_order'),
   ])
 
-  // 5. Generate PDF
+  // 4. Generate PDF
   const pdfData: PdfResumeData = {
     profile: {
       full_name: profile?.full_name ?? null,
@@ -85,7 +76,7 @@ export async function applyToVacancy(
   }) as ReactElement<DocumentProps>
   const buffer = await renderToBuffer(element)
 
-  // 6. Send email via Resend
+  // 5. Send email via Resend
   const fullName = profile?.full_name ?? 'Seafarer'
   const rank = vacancy.rank ?? 'Seafarer'
   const subject = `Application — ${rank}, ${fullName}`

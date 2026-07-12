@@ -44,15 +44,12 @@ export function BottomBar() {
           const isActive = item.path === ''
             ? pathname === `/${locale}/dashboard`
             : pathname.startsWith(href)
+          const cls = cn(
+            'flex flex-col items-center gap-1 text-[10px] font-medium px-3 py-1 transition-colors',
+            isActive ? 'text-white' : 'text-white/40'
+          )
           return (
-            <Link
-              key={item.key}
-              href={href}
-              className={cn(
-                'flex flex-col items-center gap-1 text-[10px] font-medium px-3 py-1 transition-colors',
-                isActive ? 'text-white' : 'text-white/40'
-              )}
-            >
+            <Link key={item.key} href={href} className={cls}>
               {item.icon}
               {t(item.key)}
             </Link>

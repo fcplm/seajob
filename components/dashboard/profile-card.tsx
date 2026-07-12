@@ -1,10 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getTranslations } from 'next-intl/server'
 import type { Profile } from '@/lib/supabase/types'
 
-export async function ProfileCard({ profile }: { profile: Profile }) {
-  const t = await getTranslations('profile')
-
+export function ProfileCard({ profile, fleetLabel }: { profile: Profile; fleetLabel: string }) {
   const initials = (profile.full_name ?? 'U')
     .split(' ')
     .map((n) => n[0])
@@ -12,16 +8,23 @@ export async function ProfileCard({ profile }: { profile: Profile }) {
     .toUpperCase()
     .slice(0, 2)
 
-  const fleetLabel = profile.fleet_type
-    ? t(profile.fleet_type as Parameters<typeof t>[0])
-    : '—'
-
   return (
     <div className="flex items-center gap-4">
-      <Avatar className="h-16 w-16">
-        <AvatarImage src={profile.photo_url ?? undefined} />
-        <AvatarFallback className="text-lg">{initials}</AvatarFallback>
-      </Avatar>
+      <div
+        className="h-16 w-16 rounded-full flex items-center justify-center text-lg font-semibold text-white flex-shrink-0 overflow-hidden"
+        style={{ background: '#0c2461' }}
+      >
+        {profile.photo_url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.photo_url}
+            alt={profile.full_name ?? ''}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <span>{initials}</span>
+        )}
+      </div>
       <div>
         <p className="font-semibold text-lg">{profile.full_name ?? '—'}</p>
         <p className="text-muted-foreground text-sm capitalize">{profile.rank ?? '—'}</p>

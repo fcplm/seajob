@@ -86,17 +86,14 @@ export function Sidebar() {
           const isActive = item.path === ''
             ? pathname === `/${locale}/dashboard`
             : pathname.startsWith(href)
+          const cls = cn(
+            'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors',
+            isActive
+              ? 'bg-white/15 text-white'
+              : 'text-white/45 hover:text-white/85 hover:bg-white/8'
+          )
           return (
-            <Link
-              key={item.key}
-              href={href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors',
-                isActive
-                  ? 'bg-white/15 text-white'
-                  : 'text-white/45 hover:text-white/85 hover:bg-white/8'
-              )}
-            >
+            <Link key={item.key} href={href} className={cls}>
               {icons[item.key]}
               {t(item.key)}
             </Link>

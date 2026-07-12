@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import type { Profile } from '@/lib/supabase/types'
 import { ProfileCard } from '@/components/dashboard/profile-card'
 import { SubscriptionWidget } from '@/components/dashboard/subscription-widget'
@@ -19,8 +20,13 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
     .single()
 
   const profile = rawProfile as Profile | null
-
   if (!profile) redirect(`/${locale}/login`)
+
+  const tProfile = await getTranslations('profile')
+  const knownFleetTypes = ['merchant', 'tanker', 'offshore', 'bulk', 'cruise'] as const
+  const fleetLabel = profile.fleet_type && (knownFleetTypes as readonly string[]).includes(profile.fleet_type)
+    ? tProfile(profile.fleet_type as typeof knownFleetTypes[number])
+    : (profile.fleet_type ?? '—')
 
   const { data: resumeRow } = await supabase
     .from('resumes')
@@ -42,7 +48,7 @@ export default async function DashboardPage({ params: { locale } }: { params: { 
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <ProfileCard profile={profile} />
+      <ProfileCard profile={profile} fleetLabel={fleetLabel} />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SubscriptionWidget status={profile.subscription_status} />
         <ResumeWidget hasResume={hasResume} />

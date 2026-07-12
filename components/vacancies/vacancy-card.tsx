@@ -35,11 +35,18 @@ export function VacancyCard({
       ? vacancy.description.slice(0, 120) + '…'
       : (vacancy.description ?? '')
 
+  // Use UTC-based formatting to avoid server/client timezone mismatch
   const postedDate = vacancy.posted_at
-    ? new Date(vacancy.posted_at).toLocaleDateString(
-        locale === 'ru' ? 'ru-RU' : 'en-GB',
-        { day: 'numeric', month: 'short', year: 'numeric' }
-      )
+    ? (() => {
+        const d = new Date(vacancy.posted_at)
+        const day = d.getUTCDate()
+        const month = d.getUTCMonth()
+        const year = d.getUTCFullYear()
+        const months = locale === 'ru'
+          ? ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек']
+          : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+        return `${day} ${months[month]} ${year}`
+      })()
     : ''
 
   return (
@@ -91,26 +98,14 @@ export function VacancyCard({
       <div className="flex items-center justify-between mt-auto pt-1">
         <span className="text-[11px] text-muted-foreground">{postedDate}</span>
 
-        {vacancy.contact_email ? (
-          <Button
-            size="sm"
-            onClick={handleApply}
-            disabled={loading}
-            className="text-xs h-8 px-3"
-          >
-            {loading ? '…' : t('apply')}
-          </Button>
-        ) : vacancy.url ? (
-          <a
-            href={vacancy.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-medium underline"
-            style={{ color: '#1d4ed8' }}
-          >
-            {t('viewOnSite')}
-          </a>
-        ) : null}
+        <Button
+          size="sm"
+          onClick={handleApply}
+          disabled={loading}
+          className="text-xs h-8 px-3"
+        >
+          {loading ? '…' : t('apply')}
+        </Button>
       </div>
     </div>
   )

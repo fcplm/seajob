@@ -362,15 +362,35 @@ e2e/auth.spec.ts navigation.spec.ts resume.spec.ts
 | Resume editor — programmatic PDF fetch + error toast via sonner | `2c5197a` |
 | Profile type — `bulk` added to `Profile.fleet_type` union in `lib/supabase/types.ts` | `aad051d` |
 
-### Still needs Supabase SQL (profiles constraint)
-
-The profiles table check constraint was created without 'bulk'. Run in Supabase Dashboard:
+### ✅ Profiles constraint updated
 
 ```sql
+-- Already run in Supabase Dashboard:
 ALTER TABLE profiles DROP CONSTRAINT profiles_fleet_type_check;
 ALTER TABLE profiles ADD CONSTRAINT profiles_fleet_type_check
   CHECK (fleet_type IN ('merchant','tanker','offshore','bulk','cruise'));
 ```
+
+---
+
+## Session 7 Fixes (2026-07-03)
+
+| Fix | Commit |
+|-----|--------|
+| RSS parser — handle jobatsea title format, extract salary from title + description | `d8115f0` |
+| Vacancies table — created in Supabase, first sync triggered (10 vacancies loaded) | manual |
+| CRON_SECRET — generated real value in `.env.local` | manual |
+
+### Vacancies are live
+
+- Table `vacancies` exists and has data (synced from jobatsea.online RSS)
+- Cron at `/api/vacancies/sync` runs hourly on Vercel (or trigger manually with `CRON_SECRET`)
+- Manually trigger: `curl -X POST http://localhost:3000/api/vacancies/sync -H "Authorization: Bearer <CRON_SECRET>"`
+
+### Env vars still needed for full CV Sender
+
+- `RESEND_API_KEY` — email delivery (from resend.com)
+- `ANTHROPIC_API_KEY` — AI cover letter translation
 
 ---
 
@@ -381,4 +401,5 @@ ALTER TABLE profiles ADD CONSTRAINT profiles_fleet_type_check
 | `nav.about` key exists but no About page | Minor | Dead i18n key |
 | Stripe payments are placeholder UI | By design | Future phase |
 | Form validation client-side only | Minor | Server actions already guard ownership |
-| Profiles DB constraint doesn't include 'bulk' | Medium | Run SQL above before bulk can be saved |
+| RESEND_API_KEY not set | Medium | CV Sender emails won't send without it |
+| ANTHROPIC_API_KEY not set | Low | AI translate button will error |
