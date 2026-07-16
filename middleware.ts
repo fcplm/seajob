@@ -56,6 +56,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(loginUrl)
     }
 
+    // Copy next-intl locale headers so i18n/request.ts gets the locale
+    response.headers.forEach((value, key) => {
+      supabaseResponse.headers.set(key, value)
+    })
+
     return supabaseResponse
   } catch {
     // Session check failed (e.g. invalid Supabase URL in dev) — redirect to login
