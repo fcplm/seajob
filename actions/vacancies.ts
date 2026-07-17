@@ -34,7 +34,7 @@ export async function applyToVacancy(
   const [{ data: vacancy }, { data: resume }, { data: profile }] = await Promise.all([
     supabase.from('vacancies').select('contact_email, rank, company').eq('id', vacancyId).single(),
     supabase.from('resumes').select('*').eq('user_id', user.id).single(),
-    supabase.from('profiles').select('full_name, rank, fleet_type, subscription_status').eq('id', user.id).single(),
+    supabase.from('profiles').select('full_name, rank, fleet_type, phone, subscription_status').eq('id', user.id).single(),
   ])
 
   if (!resume) return { ok: false, error: 'no_resume' }
@@ -60,6 +60,8 @@ export async function applyToVacancy(
       full_name: profile?.full_name ?? null,
       rank: profile?.rank ?? null,
       fleet_type: profile?.fleet_type ?? null,
+      phone: profile?.phone ?? null,
+      email: null,
     },
     resume: resume as Resume,
     experience: (exp.data ?? []) as ResumeExperience[],

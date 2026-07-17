@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 })
 
   const [{ data: profile }, { data: resume }] = await Promise.all([
-    supabase.from('profiles').select('full_name, rank, fleet_type, subscription_status').eq('id', user.id).single(),
+    supabase.from('profiles').select('full_name, rank, fleet_type, phone, subscription_status').eq('id', user.id).single(),
     supabase.from('resumes').select('*').eq('user_id', user.id).single(),
   ])
 
@@ -53,6 +53,8 @@ export async function GET(request: NextRequest) {
       full_name: profile?.full_name ?? null,
       rank: profile?.rank ?? null,
       fleet_type: profile?.fleet_type ?? null,
+      phone: profile?.phone ?? null,
+      email: user.email ?? null,
     },
     resume: resume as Resume,
     experience: (exp.data ?? []) as ResumeExperience[],

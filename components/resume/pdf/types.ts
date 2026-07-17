@@ -13,6 +13,8 @@ export type PdfResumeData = {
     full_name: string | null
     rank: string | null
     fleet_type: string | null
+    phone: string | null
+    email: string | null
   }
   resume: Resume
   experience: ResumeExperience[]

@@ -113,7 +113,7 @@ export async function launchCampaign(
   const [{ data: profile }, { data: resumeData }] = await Promise.all([
     supabase
       .from('profiles')
-      .select('full_name, rank, fleet_type, subscription_status')
+      .select('full_name, rank, fleet_type, phone, subscription_status')
       .eq('id', user.id)
       .single(),
     supabase.from('resumes').select('*').eq('user_id', user.id).single(),
@@ -135,6 +135,8 @@ export async function launchCampaign(
       full_name: profile?.full_name ?? null,
       rank: profile?.rank ?? null,
       fleet_type: profile?.fleet_type ?? null,
+      phone: profile?.phone ?? null,
+      email: null,
     },
     resume: resumeData as Resume,
     experience: (exp.data ?? []) as ResumeExperience[],
