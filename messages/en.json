@@ -292,6 +292,19 @@
     "contractDurationPlaceholder": "e.g. 4–6 months",
     "salaryExpectationPlaceholder": "e.g. $3,500/month",
     "pdfError": "Failed to generate PDF. Please try again.",
-    "noPdfData": "Complete at least one section before downloading."
+    "noPdfData": "Complete at least one section before downloading.",
+    "cvBuilder": "CV Builder",
+    "tabBasics": "Basics",
+    "tabExperience": "Experience",
+    "tabSkills": "Skills",
+    "tabCerts": "Certs",
+    "headingProfileSummary": "Profile Summary",
+    "headingAvailability": "Availability & Salary",
+    "headingLanguages": "Languages",
+    "headingEducation": "Education",
+    "headingReferences": "References",
+    "headingSkills": "Technical Skills",
+    "experienceHint": "Most recent first. Include vessel specs — GRT, DWT, flag.",
+    "certsHint": "DP, HUET, STCW are scanned first by offshore recruiters."
   }
 }

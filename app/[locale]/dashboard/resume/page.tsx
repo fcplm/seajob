@@ -19,11 +19,10 @@ export default async function ResumePage({ params: { locale } }: { params: { loc
 
   const { data: rawProfile } = await supabase
     .from('profiles')
-    .select('subscription_status, full_name, rank, fleet_type, phone')
+    .select('full_name, rank, fleet_type, phone')
     .eq('id', user.id)
     .single()
 
-  const subscriptionStatus = (rawProfile?.subscription_status ?? 'free') as 'free' | 'pro' | 'enterprise'
   const profile = {
     full_name: rawProfile?.full_name ?? null,
     rank: rawProfile?.rank ?? null,
@@ -69,6 +68,6 @@ export default async function ResumePage({ params: { locale } }: { params: { loc
   }
 
   return (
-    <ResumeEditor data={resumeData} profile={profile} subscriptionStatus={subscriptionStatus} />
+    <ResumeEditor data={resumeData} profile={profile} />
   )
 }

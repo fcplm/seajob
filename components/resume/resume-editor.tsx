@@ -44,15 +44,7 @@ function initCompleted(data: ResumeData): Record<SectionKey, boolean> {
 type Props = {
   data: ResumeData
   profile: CvProfile
-  subscriptionStatus: 'free' | 'pro' | 'enterprise'
 }
-
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'basics', label: 'Basics' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'certs', label: 'Certs' },
-]
 
 function SectionHeading({ children }: { children: string }) {
   return (
@@ -63,13 +55,19 @@ function SectionHeading({ children }: { children: string }) {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
+export function ResumeEditor({ data, profile }: Props) {
   const t = useTranslations('resume')
   const [activeTab, setActiveTab] = useState<Tab>('basics')
   const [completed, setCompleted] = useState<Record<SectionKey, boolean>>(initCompleted(data))
   const [liveData, setLiveData] = useState<ResumeData>(data)
   const [isDownloading, startDownload] = useTransition()
+
+  const tabs: { id: Tab; label: string }[] = [
+    { id: 'basics',     label: t('tabBasics') },
+    { id: 'experience', label: t('tabExperience') },
+    { id: 'skills',     label: t('tabSkills') },
+    { id: 'certs',      label: t('tabCerts') },
+  ]
 
   function onComplete(key: SectionKey) {
     return (complete: boolean) => setCompleted(prev => ({ ...prev, [key]: complete }))
@@ -108,7 +106,7 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
           className="flex items-center justify-between px-4 py-3 border-b border-slate-200 flex-shrink-0"
           style={{ background: '#0D1B2E' }}
         >
-          <span className="text-sm font-bold text-white">CV Builder</span>
+          <span className="text-sm font-bold text-white">{t('cvBuilder')}</span>
           <Button
             size="sm"
             onClick={handleDownload}
@@ -116,7 +114,7 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
             className="text-xs h-7 px-3"
             style={{ background: '#C8963E', color: '#fff', border: 'none' }}
           >
-            {isDownloading ? t('downloadingPdf') : '⬇ Download PDF'}
+            {isDownloading ? t('downloadingPdf') : t('downloadPdf')}
           </Button>
         </div>
 
@@ -127,7 +125,7 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
 
         {/* Tabs */}
         <div className="flex border-b border-slate-200 bg-[#EEF3FA] flex-shrink-0">
-          {TABS.map(tab => (
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -147,9 +145,9 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {activeTab === 'basics' && (
             <div>
-              <SectionHeading>Profile Summary</SectionHeading>
+              <SectionHeading>{t('headingProfileSummary')}</SectionHeading>
               <SectionPersonal
-                initialBio={data.resume?.bio ?? null}
+                initialBio={liveData.resume?.bio ?? null}
                 onComplete={onComplete('personal')}
                 onUpdate={bio => setLiveData(prev => ({
                   ...prev,
@@ -157,12 +155,12 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
                 }))}
               />
 
-              <SectionHeading>Availability & Salary</SectionHeading>
+              <SectionHeading>{t('headingAvailability')}</SectionHeading>
               <SectionPreferences
                 initialData={{
-                  availability_date: data.resume?.availability_date ?? null,
-                  contract_duration: data.resume?.contract_duration ?? null,
-                  salary_expectation: data.resume?.salary_expectation ?? null,
+                  availability_date: liveData.resume?.availability_date ?? null,
+                  contract_duration: liveData.resume?.contract_duration ?? null,
+                  salary_expectation: liveData.resume?.salary_expectation ?? null,
                 }}
                 onComplete={onComplete('preferences')}
                 onUpdate={prefs => setLiveData(prev => ({
@@ -171,32 +169,30 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
                 }))}
               />
 
-              <SectionHeading>Languages</SectionHeading>
+              <SectionHeading>{t('headingLanguages')}</SectionHeading>
               <SectionLanguages
-                initialData={data.languages}
+                initialData={liveData.languages}
                 onComplete={onComplete('languages')}
                 onUpdate={(entries: ResumeLanguage[]) => setLiveData(prev => ({ ...prev, languages: entries }))}
               />
 
-              <SectionHeading>Education</SectionHeading>
+              <SectionHeading>{t('headingEducation')}</SectionHeading>
               <SectionEducation
-                initialData={data.education}
+                initialData={liveData.education}
                 onComplete={onComplete('education')}
                 onUpdate={(entries: ResumeEducation[]) => setLiveData(prev => ({ ...prev, education: entries }))}
               />
 
-              <SectionHeading>References</SectionHeading>
-              <SectionReferences initialData={data.references} onComplete={onComplete('references')} />
+              <SectionHeading>{t('headingReferences')}</SectionHeading>
+              <SectionReferences initialData={liveData.references} onComplete={onComplete('references')} />
             </div>
           )}
 
           {activeTab === 'experience' && (
             <div>
-              <p className="text-[11.5px] text-[#7A93B4] mb-4 leading-relaxed">
-                Most recent first. Include vessel specs — GRT, DWT, flag.
-              </p>
+              <p className="text-[11.5px] text-[#7A93B4] mb-4 leading-relaxed">{t('experienceHint')}</p>
               <SectionExperience
-                initialData={data.experience}
+                initialData={liveData.experience}
                 onComplete={onComplete('experience')}
                 onUpdate={(entries: ResumeExperience[]) => setLiveData(prev => ({ ...prev, experience: entries }))}
               />
@@ -205,9 +201,9 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
 
           {activeTab === 'skills' && (
             <div>
-              <SectionHeading>Technical Skills</SectionHeading>
+              <SectionHeading>{t('headingSkills')}</SectionHeading>
               <SectionSkills
-                initialData={data.skills}
+                initialData={liveData.skills}
                 onComplete={onComplete('skills')}
                 onUpdate={(entries: ResumeSkill[]) => setLiveData(prev => ({ ...prev, skills: entries }))}
               />
@@ -216,11 +212,9 @@ export function ResumeEditor({ data, profile, subscriptionStatus }: Props) {
 
           {activeTab === 'certs' && (
             <div>
-              <p className="text-[11.5px] text-[#7A93B4] mb-4 leading-relaxed">
-                DP, HUET, STCW are scanned first by offshore recruiters.
-              </p>
+              <p className="text-[11.5px] text-[#7A93B4] mb-4 leading-relaxed">{t('certsHint')}</p>
               <SectionCertificates
-                initialData={data.certificates}
+                initialData={liveData.certificates}
                 onComplete={onComplete('certificates')}
                 onUpdate={(entries: ResumeCertificate[]) => setLiveData(prev => ({ ...prev, certificates: entries }))}
               />

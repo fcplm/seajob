@@ -292,6 +292,19 @@
     "contractDurationPlaceholder": "напр. 4–6 месяцев",
     "salaryExpectationPlaceholder": "напр. $3 500/мес",
     "pdfError": "Ошибка генерации PDF. Попробуйте ещё раз.",
-    "noPdfData": "Заполните хотя бы один раздел перед скачиванием."
+    "noPdfData": "Заполните хотя бы один раздел перед скачиванием.",
+    "cvBuilder": "CV Builder",
+    "tabBasics": "Основное",
+    "tabExperience": "Опыт",
+    "tabSkills": "Навыки",
+    "tabCerts": "Сертификаты",
+    "headingProfileSummary": "Описание профиля",
+    "headingAvailability": "Доступность и зарплата",
+    "headingLanguages": "Языки",
+    "headingEducation": "Образование",
+    "headingReferences": "Рекомендации",
+    "headingSkills": "Технические навыки",
+    "experienceHint": "Начните с последнего места. Укажите характеристики судна — GRT, DWT, флаг.",
+    "certsHint": "DP, HUET, STCW — первое, что проверяют офшорные рекрутеры."
   }
 }
