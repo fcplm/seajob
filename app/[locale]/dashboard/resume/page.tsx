@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
 import { ResumeEditor } from '@/components/resume/resume-editor'
 import type {
   Resume,
@@ -18,15 +17,20 @@ export default async function ResumePage({ params: { locale } }: { params: { loc
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/${locale}/login`)
 
-  const t = await getTranslations('resume')
-
   const { data: rawProfile } = await supabase
     .from('profiles')
-    .select('subscription_status')
+    .select('subscription_status, full_name, rank, fleet_type, phone')
     .eq('id', user.id)
     .single()
 
   const subscriptionStatus = (rawProfile?.subscription_status ?? 'free') as 'free' | 'pro' | 'enterprise'
+  const profile = {
+    full_name: rawProfile?.full_name ?? null,
+    rank: rawProfile?.rank ?? null,
+    fleet_type: rawProfile?.fleet_type ?? null,
+    phone: rawProfile?.phone ?? null,
+    email: user.email ?? null,
+  }
 
   const { data: resume } = await supabase
     .from('resumes')
@@ -65,9 +69,6 @@ export default async function ResumePage({ params: { locale } }: { params: { loc
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
-      <ResumeEditor data={resumeData} subscriptionStatus={subscriptionStatus} />
-    </div>
+    <ResumeEditor data={resumeData} profile={profile} subscriptionStatus={subscriptionStatus} />
   )
 }

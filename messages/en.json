@@ -155,9 +155,18 @@
     "bulk": "Bulk",
     "cruise": "Cruise"
   },
+  "notifications": {
+    "title": "Notifications",
+    "emptyTitle": "No notifications yet",
+    "emptyDesc": "You'll be notified here about new matching vacancies, CV send confirmations, and platform announcements.",
+    "emptyHint": "Make sure your profile is complete to receive relevant vacancy alerts."
+  },
   "settings": {
     "title": "Settings",
     "language": "Language",
+    "emailNotifications": "Email Notifications",
+    "emailNotificationsDesc": "Receive alerts for new matching vacancies and application updates.",
+    "emailNotificationsComingSoon": "Coming soon",
     "changePassword": "Change Password",
     "deleteAccount": "Delete Account",
     "deleteWarning": "This action cannot be undone."

@@ -14,6 +14,7 @@ import type { ResumeExperience } from '@/lib/supabase/types'
 type Props = {
   initialData: ResumeExperience[]
   onComplete: (complete: boolean) => void
+  onUpdate?: (entries: ResumeExperience[]) => void
 }
 
 type FormState = Omit<ResumeExperience, 'id' | 'resume_id'>
@@ -24,7 +25,7 @@ const EMPTY: FormState = {
   ended_at: null, sort_order: 0,
 }
 
-export function SectionExperience({ initialData, onComplete }: Props) {
+export function SectionExperience({ initialData, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [entries, setEntries] = useState(initialData)
   const [adding, setAdding] = useState(false)
@@ -56,7 +57,9 @@ export function SectionExperience({ initialData, onComplete }: Props) {
       const result = await updateExperience(editingId, form)
       setSaving(false)
       if (result.error) { toast.error(t('saveError')); return }
-      setEntries(prev => prev.map(e => e.id === editingId ? { ...e, ...form } : e))
+      const updated = entries.map(e => e.id === editingId ? { ...e, ...form } : e)
+      setEntries(updated)
+      onUpdate?.(updated)
       setEditingId(null)
     } else {
       const result = await addExperience(form)
@@ -66,6 +69,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
         const next = [...entries, result.entry]
         setEntries(next)
         onComplete(true)
+        onUpdate?.(next)
       }
       setAdding(false)
     }
@@ -78,6 +82,7 @@ export function SectionExperience({ initialData, onComplete }: Props) {
     const next = entries.filter(e => e.id !== id)
     setEntries(next)
     onComplete(next.length > 0)
+    onUpdate?.(next)
   }
 
   const showForm = adding || editingId !== null

@@ -17,9 +17,10 @@ type InitialData = {
 type Props = {
   initialData: InitialData
   onComplete: (complete: boolean) => void
+  onUpdate?: (data: InitialData) => void
 }
 
-export function SectionPreferences({ initialData, onComplete }: Props) {
+export function SectionPreferences({ initialData, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [form, setForm] = useState<InitialData>(initialData)
   const [saving, setSaving] = useState(false)
@@ -40,6 +41,7 @@ export function SectionPreferences({ initialData, onComplete }: Props) {
       setSaved(true)
       const anyFilled = !!(form.availability_date || form.contract_duration || form.salary_expectation)
       onComplete(anyFilled)
+      onUpdate?.(form)
       setTimeout(() => setSaved(false), 2000)
     }
   }

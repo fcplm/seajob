@@ -11,9 +11,10 @@ import { upsertResumeMeta } from '@/actions/resume'
 type Props = {
   initialBio: string | null
   onComplete: (complete: boolean) => void
+  onUpdate?: (bio: string) => void
 }
 
-export function SectionPersonal({ initialBio, onComplete }: Props) {
+export function SectionPersonal({ initialBio, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [bio, setBio] = useState(initialBio ?? '')
   const [saving, setSaving] = useState(false)
@@ -28,6 +29,7 @@ export function SectionPersonal({ initialBio, onComplete }: Props) {
     } else {
       setSaved(true)
       onComplete(bio.trim().length > 0)
+      onUpdate?.(bio)
       setTimeout(() => setSaved(false), 2000)
     }
   }

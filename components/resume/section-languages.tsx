@@ -14,11 +14,11 @@ import type { ResumeLanguage } from '@/lib/supabase/types'
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Native'] as const
 
-type Props = { initialData: ResumeLanguage[]; onComplete: (complete: boolean) => void }
+type Props = { initialData: ResumeLanguage[]; onComplete: (complete: boolean) => void; onUpdate?: (entries: ResumeLanguage[]) => void }
 type FormState = Omit<ResumeLanguage, 'id' | 'resume_id'>
 const EMPTY: FormState = { language: null, level: null, sort_order: 0 }
 
-export function SectionLanguages({ initialData, onComplete }: Props) {
+export function SectionLanguages({ initialData, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [entries, setEntries] = useState(initialData)
   const [adding, setAdding] = useState(false)
@@ -38,13 +38,20 @@ export function SectionLanguages({ initialData, onComplete }: Props) {
       const result = await updateLanguage(editingId, form)
       setSaving(false)
       if (result.error) { toast.error(t('saveError')); return }
-      setEntries(prev => prev.map(e => e.id === editingId ? { ...e, ...form } : e))
+      const updated = entries.map(e => e.id === editingId ? { ...e, ...form } : e)
+      setEntries(updated)
+      onUpdate?.(updated)
       setEditingId(null)
     } else {
       const result = await addLanguage({ ...form, sort_order: entries.length })
       setSaving(false)
       if (result.error) { toast.error(t('saveError')); return }
-      if (result.entry) { setEntries(prev => [...prev, result.entry!]); onComplete(true) }
+      if (result.entry) {
+        const next = [...entries, result.entry]
+        setEntries(next)
+        onComplete(true)
+        onUpdate?.(next)
+      }
       setAdding(false)
     }
     setForm(EMPTY)
@@ -54,7 +61,9 @@ export function SectionLanguages({ initialData, onComplete }: Props) {
     const result = await deleteLanguage(id)
     if (result.error) { toast.error(t('saveError')); return }
     const next = entries.filter(e => e.id !== id)
-    setEntries(next); onComplete(next.length > 0)
+    setEntries(next)
+    onComplete(next.length > 0)
+    onUpdate?.(next)
   }
 
   const showForm = adding || editingId !== null

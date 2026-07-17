@@ -11,11 +11,11 @@ import { toast } from 'sonner'
 import { addCertificate, updateCertificate, deleteCertificate } from '@/actions/resume'
 import type { ResumeCertificate } from '@/lib/supabase/types'
 
-type Props = { initialData: ResumeCertificate[]; onComplete: (complete: boolean) => void }
+type Props = { initialData: ResumeCertificate[]; onComplete: (complete: boolean) => void; onUpdate?: (entries: ResumeCertificate[]) => void }
 type FormState = Omit<ResumeCertificate, 'id' | 'resume_id'>
 const EMPTY: FormState = { name: null, issued_by: null, issued_at: null, expires_at: null, sort_order: 0 }
 
-export function SectionCertificates({ initialData, onComplete }: Props) {
+export function SectionCertificates({ initialData, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [entries, setEntries] = useState(initialData)
   const [adding, setAdding] = useState(false)
@@ -39,13 +39,20 @@ export function SectionCertificates({ initialData, onComplete }: Props) {
       const result = await updateCertificate(editingId, form)
       setSaving(false)
       if (result.error) { toast.error(t('saveError')); return }
-      setEntries(prev => prev.map(e => e.id === editingId ? { ...e, ...form } : e))
+      const updated = entries.map(e => e.id === editingId ? { ...e, ...form } : e)
+      setEntries(updated)
+      onUpdate?.(updated)
       setEditingId(null)
     } else {
       const result = await addCertificate({ ...form, sort_order: entries.length })
       setSaving(false)
       if (result.error) { toast.error(t('saveError')); return }
-      if (result.entry) { setEntries(prev => [...prev, result.entry!]); onComplete(true) }
+      if (result.entry) {
+        const next = [...entries, result.entry]
+        setEntries(next)
+        onComplete(true)
+        onUpdate?.(next)
+      }
       setAdding(false)
     }
     setForm(EMPTY)
@@ -55,7 +62,9 @@ export function SectionCertificates({ initialData, onComplete }: Props) {
     const result = await deleteCertificate(id)
     if (result.error) { toast.error(t('saveError')); return }
     const next = entries.filter(e => e.id !== id)
-    setEntries(next); onComplete(next.length > 0)
+    setEntries(next)
+    onComplete(next.length > 0)
+    onUpdate?.(next)
   }
 
   const showForm = adding || editingId !== null

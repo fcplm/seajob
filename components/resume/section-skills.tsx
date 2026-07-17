@@ -10,9 +10,9 @@ import { toast } from 'sonner'
 import { addSkill, deleteSkill } from '@/actions/resume'
 import type { ResumeSkill } from '@/lib/supabase/types'
 
-type Props = { initialData: ResumeSkill[]; onComplete: (complete: boolean) => void }
+type Props = { initialData: ResumeSkill[]; onComplete: (complete: boolean) => void; onUpdate?: (entries: ResumeSkill[]) => void }
 
-export function SectionSkills({ initialData, onComplete }: Props) {
+export function SectionSkills({ initialData, onComplete, onUpdate }: Props) {
   const t = useTranslations('resume')
   const [entries, setEntries] = useState(initialData)
   const [input, setInput] = useState('')
@@ -29,6 +29,7 @@ export function SectionSkills({ initialData, onComplete }: Props) {
       const next = [...entries, result.entry]
       setEntries(next)
       onComplete(true)
+      onUpdate?.(next)
     }
     setInput('')
   }
@@ -39,6 +40,7 @@ export function SectionSkills({ initialData, onComplete }: Props) {
     const next = entries.filter(e => e.id !== id)
     setEntries(next)
     onComplete(next.length > 0)
+    onUpdate?.(next)
   }
 
   return (
